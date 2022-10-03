@@ -15,6 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+BASE_URL = "http://localhost:8000"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -30,7 +31,7 @@ ALLOWED_HOSTS = []
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
-    # ...
+    "localhost",
 ]
 
 # Application definition
@@ -42,10 +43,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     # debug_toolbar
     "debug_toolbar",
+
     # My Apps
-    "user_profile.apps.UserProfileConfig"
+    "user_profile.apps.UserProfileConfig",
+    "event.apps.EventConfig",
+
+
+
+
 ]
 
 MIDDLEWARE = [
