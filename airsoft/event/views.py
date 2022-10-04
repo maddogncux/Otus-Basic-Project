@@ -1,6 +1,6 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpRequest, request
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from .models import Event, EventTags, EventPost
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView,CreateView
 from django.views import View
@@ -77,7 +77,8 @@ class EventPostCreateView(CreateView):
         form.instance.event_id = self.kwargs['pk']
         return super(EventPostCreateView, self).form_valid(form)
 
-
+    def get_success_url(self):
+        return reverse("event:event", kwargs={"pk": self.object.event.pk})
 
 
 
