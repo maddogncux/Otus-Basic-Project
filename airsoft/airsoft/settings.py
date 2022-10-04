@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
 
     # My Apps
-    "user_profile.apps.UserProfileConfig",
+
     "event.apps.EventConfig",
 
 
