@@ -72,7 +72,6 @@ class EventTagsDeleteView(DeleteView):
 class EventPostCreateView(CreateView):
     model = EventPost
     fields = ["name", "body"]
-    # success_url = reverse_lazy("event:events", kwargs={"pk": event_id})
     def form_valid(self, form):
         form.instance.event_id = self.kwargs['pk']
         return super(EventPostCreateView, self).form_valid(form)
