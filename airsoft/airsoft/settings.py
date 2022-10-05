@@ -48,10 +48,10 @@ INSTALLED_APPS = [
     "debug_toolbar",
 
     # My Apps
+    "u_auth.apps.UAuthConfig",
 
+    "homepage.apps.HomepageConfig",
     "event.apps.EventConfig",
-
-
 
 
 ]

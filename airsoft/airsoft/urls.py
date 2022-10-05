@@ -19,10 +19,10 @@ from django.conf import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('events/', include("event.urls")),
+    path('auth/', include("u_auth.urls")),
+    path('', include("homepage.urls")),
 
 ]
-
-
 # admin if debug
 if settings.DEBUG:
     urlpatterns.append(
