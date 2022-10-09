@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, DeleteView, CreateView, U
 from .models import Event, EventTags, EventPost
 
 
-
+# remove template_name latter
 class EventListView(ListView):
     template_name = "event/events.html"
     context_object_name = "events"
@@ -39,10 +39,10 @@ class EventDeleteView(DeleteView):
     success_url = reverse_lazy("event:events")
 
 
-
 class EventTagsListView(ListView):
     model = EventTags
     success_url = reverse_lazy("event:tags")
+
 
 class EventByTagsListView(ListView):
     template_name = "event/events.html"
@@ -70,10 +70,29 @@ class EventPostCreateView(CreateView):
         return super(EventPostCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse("event:event", kwargs={"pk": self.object.event.pk})
+        return reverse("event:event", kwargs={"pk": self.object.event.pk})  # Optimize
+
+
+# class EventPostDetailView(DetailView):
+#     context_object_name = "post"
+#     queryset = Event.objects.prefetch_related("post")
+
+
+
+
+class EventPostUpdateView(UpdateView):
+    model = EventPost
+    fields = ["name", "body"]
+    template_name_suffix = '_update_form'
+
+
+    def get_success_url(self):
+        return reverse("event:event", kwargs={"pk": self.object.event.pk})    # Optimize
+
 
 
 class EventPostDeleteView(DeleteView):
     model = EventPost
 
-
+    def get_success_url(self):
+        return reverse("event:event", kwargs={"pk": self.object.event.pk})  # Optimize

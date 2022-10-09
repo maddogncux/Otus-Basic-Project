@@ -69,7 +69,7 @@
             <ul class="list-group">
                 {% for post in event.post.all %}
                 <li class="list-group-item">
-                    {{ post.name }}{% if post.body %}: <em>{{ post.body }}</em>
+                    <a href="#">Create Post{{ post.name }}{% if post.body %}: <em>{{ post.body }}</em></a>
                     {% endif %}
                 </li>
                 {% endfor %}
