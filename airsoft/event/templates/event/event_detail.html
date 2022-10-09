@@ -9,7 +9,7 @@
 <div class="my-5">
     <a href="{% url 'event:events' %}">Back to list</a>
 </div>
-
+ <a href="{% url 'event:delete-event' event.id %}"> del - {{ event.name }}</a>
 
 <div class="my-5">
     <div class="container">

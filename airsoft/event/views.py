@@ -5,29 +5,6 @@ from django.views.generic import ListView, DetailView, DeleteView, CreateView, U
 from .models import Event, EventTags, EventPost
 
 
-# Create your views here.
-
-# from django.views.decorators.csrf import ensure_csrf_cookie
-# from django.views.generic.base import TemplateView
-# from django.utils.decorators import method_decorator
-#
-# class IndexView(TemplateView):
-#     template_name = 'index.html'
-#
-#     @method_decorator(ensure_csrf_cookie)
-#     def dispatch(self, *args, **kwargs):
-#         return super(IndexView, self).dispatch(*args, **kwargs)
-
-
-# class EventView(View):
-#     template_name = "event/index.html"
-#     return HttpResponse('Hello, World!')
-
-
-# def index(request: HttpRequest):
-#
-#     return render(request=request, template_name="event/index.html", )
-
 
 class EventListView(ListView):
     template_name = "event/events.html"
@@ -47,26 +24,25 @@ class EventDetailView(DetailView):
                 .prefetch_related("post", "tags")
                 )
 
+
 class EventUpdateView(UpdateView):
     model = Event
     fields = ["name", "place", "duration", "body", "additional_block1"]
     template_name_suffix = '_update_form'
 
-    # success_url = reverse_lazy("event:event")
+    def get_success_url(self):
+        return reverse("event:event", kwargs={"pk": self.object.pk})
 
-    # def form_valid(self, form):
-    #     form.instance.event_id = self.kwargs['pk']
-    #     return super(EventPostCreateView, self).form_valid(form)
-    #
-    # def get_success_url(self):
-    #     return reverse("event:event", kwargs={"pk": self.object.vent.pk})
 
+class EventDeleteView(DeleteView):
+    model = Event
+    success_url = reverse_lazy("event:events")
 
 
 
 class EventTagsListView(ListView):
     model = EventTags
-
+    success_url = reverse_lazy("event:tags")
 
 class EventByTagsListView(ListView):
     template_name = "event/events.html"
