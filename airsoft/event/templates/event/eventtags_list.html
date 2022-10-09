@@ -16,23 +16,16 @@ Tags
 <div class="my-5">
     <ul>
         <ul class="list-group">
-           {% for event_tags in object_list %}
-             <li class="list-group-item">
+            {% for event_tags in object_list %}
+            <li class="list-group-item">
 
-                 <a href="{%url 'event:by_tags' event_tags  %}">{{event_tags.name}}</a>
-             <span class="float-end"><a href="{%url 'event:delete-tags' event_tags.id  %}">Del</a> </span>
-             </li>
+                <a href="{%url 'event:by_tags' event_tags  %}">{{event_tags.name}}</a>
+                <span class="float-end"><a href="{%url 'event:delete-tags' event_tags.id  %}">Del</a> </span>
+            </li>
             {% endfor %}
         </ul>
     </ul>
 
 
-
-
-
-
-
-
-
-{% endblock %}
-<!--   <a href="{%url 'event:by_tags' %}">{{event_tags.name}}</a>-->
+    {% endblock %}
+    <!--   <a href="{%url 'event:by_tags' %}">{{event_tags.name}}</a>-->

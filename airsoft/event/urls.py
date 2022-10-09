@@ -7,7 +7,8 @@ from .views import (
     EventTagsListView,
     EventPostDeleteView,
     EventTagsDeleteView,
-    EventPostCreateView
+    EventPostCreateView,
+    EventUpdateView
 )
 
 app_name = "event"
@@ -19,7 +20,7 @@ urlpatterns = [
     path("tags/<int:pk>/confirm-delete", EventTagsDeleteView.as_view(), name="delete-tags"),
     path("<int:pk>/", EventDetailView.as_view(), name="event"),
     path("<int:pk>/create", EventPostCreateView.as_view(), name="create-post"),
-    # path("<int:pk>/", EventUpdateView.as_view(), name="edit"),
+    path("<int:pk>/edit", EventUpdateView.as_view(), name="edit"),
     # path("tags/", EventTagsListView.as_view(), name="Tags"),
     path("<event_tags>/", EventByTagsListView.as_view(), name="by_tags"),
 

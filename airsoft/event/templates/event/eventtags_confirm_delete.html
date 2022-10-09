@@ -3,7 +3,7 @@
 
 {% block title %}
 <div class="my-5">
-Delete {{tag}}
+    Delete {{tag}}
 </div>
 {% endblock %}
 
@@ -16,11 +16,11 @@ Delete {{tag}}
 
         <form method="post">{% csrf_token %}
             {{ form}}
-            <button class="btn btn-danger" type="submit" >Delete</button>
+            <button class="btn btn-danger" type="submit">Delete</button>
 
         </form>
     </div>
 </div>
-    </div>
+</div>
 </div>
 {% endblock %}

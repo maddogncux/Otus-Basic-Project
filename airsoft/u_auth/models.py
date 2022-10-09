@@ -18,6 +18,8 @@ class UserProfile(models.Model):
     if TYPE_CHECKING:
         objects: models.Manager
 
+    def __str__(self):
+        return self.user.username
 
 @receiver(signal=post_save, sender=UserModel)
 def user_saved_handler(instance: UserModel, created: bool, **kwargs):

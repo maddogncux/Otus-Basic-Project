@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpRequest, request
-from django.urls import reverse_lazy,reverse
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView
+
 from .models import Event, EventTags, EventPost
-from django.views.generic import ListView, DetailView, UpdateView, DeleteView,CreateView
-from django.views import View
+
+
 # Create your views here.
 
 # from django.views.decorators.csrf import ensure_csrf_cookie
@@ -46,10 +47,26 @@ class EventDetailView(DetailView):
                 .prefetch_related("post", "tags")
                 )
 
+class EventUpdateView(UpdateView):
+    model = Event
+    fields = ["name", "place", "duration", "body", "additional_block1"]
+    template_name_suffix = '_update_form'
+
+    # success_url = reverse_lazy("event:event")
+
+    # def form_valid(self, form):
+    #     form.instance.event_id = self.kwargs['pk']
+    #     return super(EventPostCreateView, self).form_valid(form)
+    #
+    # def get_success_url(self):
+    #     return reverse("event:event", kwargs={"pk": self.object.vent.pk})
+
+
 
 
 class EventTagsListView(ListView):
     model = EventTags
+
 
 class EventByTagsListView(ListView):
     template_name = "event/events.html"
@@ -68,10 +85,10 @@ class EventTagsDeleteView(DeleteView):
     success_url = reverse_lazy("event:tags")
 
 
-
 class EventPostCreateView(CreateView):
     model = EventPost
     fields = ["name", "body"]
+
     def form_valid(self, form):
         form.instance.event_id = self.kwargs['pk']
         return super(EventPostCreateView, self).form_valid(form)
@@ -80,20 +97,7 @@ class EventPostCreateView(CreateView):
         return reverse("event:event", kwargs={"pk": self.object.event.pk})
 
 
-
-
-
-
 class EventPostDeleteView(DeleteView):
     model = EventPost
 
 
-
-
-
-
-# class EventUpdateView(UpdateView):
-#     model = Event
-#
-#     fields = ['place']
-#     template_name_suffix = '_update_form'
