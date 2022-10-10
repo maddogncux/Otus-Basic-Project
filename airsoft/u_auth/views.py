@@ -1,20 +1,19 @@
-from django.contrib import messages
-from django.http import request
+from django.contrib.auth.models import Permission
 from django.views.generic.edit import CreateView
 from django.contrib.auth.views import (
     LoginView as LoginViewGeneric,
     LogoutView as LogoutViewGeneric,
 
 )
-from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
+
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 
 from .forms import UserForm
 from .models import UserModel
 
 # Create your views here.
+
 
 class MeView(TemplateView):
     template_name = "u_auth/me.html"

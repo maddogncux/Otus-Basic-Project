@@ -1,0 +1,35 @@
+{% extends 'homepage/base.html' %}
+
+
+{% block title %}
+Tags
+{% endblock %}
+
+
+{% block body %}
+<div class="my-5">
+
+    <a href="{% url 'event:events' %}">Back to list</a>
+{{ value|default_if_none:"nothing" }}
+</div>
+{{regs.registered.side.all}}
+{%for side in regs.registered.side.all %}
+{{side}}
+{%endfor%}
+<div class="my-5">
+    <ul>
+        {%for registered in regs.registered.all %}
+
+            <ul class="list-group">
+
+            <li class="list-group-item">
+                {{ registered.team }}  {{registered.side}} member_to_go {{registered.yes.count}} member_mby{{registered.mby.count}}
+                <a href="{}"></a>
+                <span class="float-end"><a href="{}">Del</a> </span>
+            </li>
+        {%endfor%}
+        </ul>
+    </ul>
+
+
+    {% endblock %}

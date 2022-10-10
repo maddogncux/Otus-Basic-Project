@@ -46,16 +46,17 @@ INSTALLED_APPS = [
 
     # debug_toolbar
     "debug_toolbar",
-    'bootstrap',
-    'fontawesome',
-    "django_bootstrap5",
+    # 'bootstrap',
+    # 'fontawesome',
+    # "django_bootstrap5",
 
     # My Apps
     "u_auth.apps.UAuthConfig",
 
     "homepage.apps.HomepageConfig",
     "event.apps.EventConfig",
-
+    "teams.apps.TeamsConfig",
+    "org.apps.OrgConfig",
 
 ]
 
@@ -137,7 +138,7 @@ USE_TZ = True
 #
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = "static", "airsoft/static/"
+STATICFILES_DIRS = "static", "/airsoft/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

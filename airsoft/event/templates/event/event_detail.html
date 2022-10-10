@@ -1,5 +1,5 @@
-{% extends 'event/base.html' %}
-
+{% extends 'homepage/base.html' %}
+edit-event
 
 {% block title %}
 1 Event
@@ -9,8 +9,13 @@
 <div class="my-5">
     <a href="{% url 'event:events' %}">Back to list</a>
 </div>
- <a href="{% url 'event:delete-event' event.id %}"> del - {{ event.name }}</a>
-
+{{event}}  {{event.event_reg}} {{event.registered.team}}
+<p><a href="{% url 'event:delete' event.slug %}"> del - {{ event.name }}</a></p>
+<p><a href="{% url 'event:edit' event.slug %}"> edit - {{ event.name }}</a></p>
+<p><a href="{% url 'event:services' event.slug %}"> servis </a></p>
+<p><a href="{% url 'event:sides' event.slug %}"> side </a></p>
+<p><a href="{% url 'event:reg' event.slug %}"> reg </a></p>
+<p><a href="{% url 'event:reg-detail' event.slug event.event_reg.id %}"> reg detail </a></p>
 <div class="my-5">
     <div class="container">
         <div class="row">
@@ -42,7 +47,6 @@
         </div>
     </div>
 </div>
-</div>
 
 <div class="container">
     <div class="col-md-6">
@@ -59,7 +63,7 @@
 
     <div class="my-5">
 
-        <a href="{% url 'event:create-post' event.id %}">Create Post</a>
+        <a href="{% url 'event:create-post' event.slug %}">Create Post</a>
 
     </div>
 
@@ -71,9 +75,9 @@
                 <li class="list-group-item">
                     <a href="{% url 'event:post-detail' event.id post.id %}">Create Post{{ post.name }}{% if post.body %}: <em>{{ post.body }}{{ post.id}} {{post.pk}}</em></a>
 
-                    <span class="float-end"><a href="{%url 'event:edit-post' event.id post.id  %}">edit</a> </span>
+                    <span class="float-end"><a href="{%url 'event:edit-post' event.slug post.id  %}">edit</a> </span>
 
-                    <span class="float-end"><a href="{%url 'event:delete-post' event.id post.id  %}">del</a> <div class="vr"></div></span>
+                    <span class="float-end"><a href="{%url 'event:delete-post' event.slug post.id  %}">del</a> <div class="vr"></div></span>
 
                     {% endif %}
                 </li>

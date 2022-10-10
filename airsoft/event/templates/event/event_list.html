@@ -1,4 +1,4 @@
-{% extends 'event/base.html' %}
+{% extends 'homepage/base.html' %}
 
 {% block title %}
 
@@ -16,9 +16,9 @@
                         <div class="card">
                             <img alt="..." class="card-img-top" src="...">
                             <div class="card-body">
-                                <h5 class="card-title">{{event.name}}</h5>
+                                <h5 class="card-title">{{event.name}}{{ event.slug }}</h5>
                                 <p class="card-text">{{event.place}}</p>
-                                <a class="stretched-link" href="{% url 'event:event' event.pk %}"></a>
+                                <a class="stretched-link" href="{{ event.slug }}"></a>
                             </div>
                         </div>
                     </div>

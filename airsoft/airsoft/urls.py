@@ -20,10 +20,12 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+    path('', include("homepage.urls")),
     path("admin/", admin.site.urls),
     path('events/', include("event.urls")),
     path('auth/', include("u_auth.urls")),
-    path('', include("homepage.urls")),
+    path('teams/', include("teams.urls")),
+    path('org/', include("org.urls")),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
