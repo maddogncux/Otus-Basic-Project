@@ -1,3 +1,4 @@
+from django.http import request
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView
@@ -73,12 +74,20 @@ class EventPostCreateView(CreateView):
         return reverse("event:event", kwargs={"pk": self.object.event.pk})  # Optimize
 
 
-# class EventPostDetailView(DetailView):
-#     context_object_name = "post"
-#     queryset = Event.objects.prefetch_related("post")
+class EventPostDetailView(DetailView):
+    # model = EventPost
+    # context_object_name = "post"
+    # queryset = Event.objects.prefetch_related("post")
+    context_object_name = "post"
+    queryset = EventPost.objects
+                # .select_related()
+                # .prefetch_related("post", "tags")
 
-
-
+    # def get_queryset(self):
+    #     qs = super().get_queryset()
+    #     post_id = self.kwargs["post_id"]
+    #     post: EventPost = get_object_or_404(EventPost, name=post_id)
+    #     return qs.filter(post=post)
 
 class EventPostUpdateView(UpdateView):
     model = EventPost
@@ -90,9 +99,10 @@ class EventPostUpdateView(UpdateView):
         return reverse("event:event", kwargs={"pk": self.object.event.pk})    # Optimize
 
 
-
 class EventPostDeleteView(DeleteView):
     model = EventPost
+
+
 
     def get_success_url(self):
         return reverse("event:event", kwargs={"pk": self.object.event.pk})  # Optimize

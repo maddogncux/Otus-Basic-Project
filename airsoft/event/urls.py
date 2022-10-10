@@ -10,8 +10,9 @@ from .views import (
     EventPostCreateView,
     EventUpdateView,
     EventDeleteView,
-    # EventPostUpdateView,
-    # EventPostDetailView,
+    EventPostUpdateView,
+    EventPostDetailView,
+    EventPostDeleteView
 
 
 )
@@ -21,11 +22,10 @@ app_name = "event"
 
 urlpatterns = [
     # Events links
-
-    path("", EventListView.as_view(), name="events"),
-    path("<int:pk>/", EventDetailView.as_view(), name="event"),
-    path("<int:pk>/edit", EventUpdateView.as_view(), name="edit-event"),
     path("<int:pk>/confirm-delete", EventDeleteView.as_view(), name='delete-event'),
+    path("<int:pk>/edit", EventUpdateView.as_view(), name="edit-event"),
+    path("<int:pk>/", EventDetailView.as_view(), name="event"),
+    path("", EventListView.as_view(), name="events"),
 
     # Tags links
 
@@ -36,9 +36,9 @@ urlpatterns = [
 
     # Posts links
     path("<int:pk>/create", EventPostCreateView.as_view(), name="create-post"),
-    # path("<int:pk>/post/", EventPostDetailView.as_view(), name="post-detail"),
-    # path("<int:pk>/edit_post", EventPostUpdateView.as_view(), name="edit-post"),
-
+    path("<int:events_pk>/post/<int:pk>/", EventPostDetailView.as_view(), name="post-detail"),
+    path("<int:events_pk>/post/<int:pk>/edit_post", EventPostUpdateView.as_view(), name="edit-post"),
+    path("<int:events_pk>/post/<int:pk>/confirm-delete", EventPostDeleteView.as_view(), name="delete-post"),
 ]
 
 
