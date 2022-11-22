@@ -40,7 +40,7 @@ class OrgDetailView(DetailView):
     context_object_name = "org"
     queryset = (Organizations
                 .objects
-                .select_related("owner")
+                # .select_related("owner")
                 # .prefetch_related("events")
                 )
 

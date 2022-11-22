@@ -19,7 +19,7 @@ class Event(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False)
     place = models.CharField(max_length=64, blank=False, null=False)
     tags = models.ManyToManyField("event.EventTags", related_name="Tags", blank=True)
-    owner = models.OneToOneField("org.Organizations", on_delete=models.CASCADE, related_name="owner")  # must be created by founder
+    owner = models.ForeignKey("org.Organizations", on_delete=models.PROTECT, related_name="owner")  # must be created by founder
     start_date = models.DateField()
     end_date = models.DateField()
     body = models.TextField(blank=True, null=True)
