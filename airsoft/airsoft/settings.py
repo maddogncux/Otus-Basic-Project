@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     "event.apps.EventConfig",
     "teams.apps.TeamsConfig",
     "org.apps.OrgConfig",
+    # real apps
+    # "airsoft_teams.apps.AirsoftTeamsConfig"
 
 ]
 

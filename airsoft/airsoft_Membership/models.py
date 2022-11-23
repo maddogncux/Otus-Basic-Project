@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -13,6 +15,9 @@ class BasicGroup(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False)
     city = models.CharField(max_length=64, blank=False, null=False)
     is_private = models.BooleanField(default=False)
+
+    if TYPE_CHECKING:
+        objects: models.Manager
 
     def __str__(self):
         return self.name
