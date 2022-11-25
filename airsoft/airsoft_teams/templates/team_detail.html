@@ -1,0 +1,33 @@
+{% extends 'homepage/base.html' %}
+
+
+{% block title %}
+teams
+{% endblock %}
+
+{% block body %}
+<p>team :</p>
+<li class="list-group-item">city - {{team.city}}</li>
+<li class="list-group-item">описание - {{team.team_owner.description}}</li>
+<li class="list-group-item">name - {{team.name}}</li>
+<li class="list-group-item">owner - {{team.owner}}</li>
+<li class="list-group-item">id - {{team.id}}</li>
+
+
+<a class="btn btn-primary" href="{%url 'airsoft_membership:create_request' team.pk %}" role="button"> Вступить </a>
+
+
+
+<p><li class="list-group-item">user request</li></p>
+
+{%for requset in team.membership_request.all %}
+<li class="list-group-item">{{ requset.user }}</li>
+{%endfor%}
+
+
+<p><li class="list-group-item">some shit</li></p>
+{%for member in team.user_group.members.all %}
+<li class="list-group-item">{{ member }}</li>
+{%endfor%}
+
+{% endblock %}

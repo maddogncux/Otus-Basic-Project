@@ -1,1 +1,1 @@
-app_name = "gear"
+app_name = "airsoft_gear"

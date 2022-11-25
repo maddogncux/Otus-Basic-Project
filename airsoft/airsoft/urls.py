@@ -21,11 +21,17 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', include("homepage.urls")),
+    path("teams/", include("airsoft_teams.urls")),
+    path("membership/", include("airsoft_membership.urls")),
+    # path('organization/', include("airsoft_organization.urls")),
+
+
+
     path("admin/", admin.site.urls),
-    path('events/', include("event.urls")),
+    # path('events/', include("event.urls")),
     path('auth/', include("u_auth.urls")),
-    path('teams/', include("teams.urls")),
-    path('org/', include("org.urls")),
+    # path('teams/', include("teams.urls")),
+    # path('org/', include("org.urls")),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

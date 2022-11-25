@@ -1,0 +1,16 @@
+{% extends 'homepage/base.html' %}
+
+
+{% block title %}
+teams
+{% endblock %}
+
+{% block body %}
+{% for object in object_list %}
+<li class="list-group-item"><a href="{% url 'airsoft_teams:team_detail' object.pk %}">{{ object.user_group.name }}</a></li>
+
+{% endfor %}
+
+
+
+{% endblock %}

@@ -24,9 +24,8 @@ class BasicGroup(models.Model):
 
 
 class MembershipRequest(models.Model):
-    Group = models.ForeignKey(BasicGroup, related_name="Membership_request", on_delete=models.CASCADE, blank=False)
+    group = models.ForeignKey(BasicGroup, related_name="membership_request", on_delete=models.CASCADE, blank=False)
     user = models.ForeignKey(UserModel, related_name="request_by", blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
-
+        return self.user

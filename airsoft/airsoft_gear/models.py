@@ -4,5 +4,6 @@ from django.db import models
 
 
 class Pattern(models.Model):
-    name = models.CharField()
+    name = models.CharField(max_length=120)
     img = models.ImageField(upload_to="pattern", blank=True)
+
