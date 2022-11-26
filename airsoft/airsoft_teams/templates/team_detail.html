@@ -13,21 +13,47 @@ teams
 <li class="list-group-item">owner - {{team.owner}}</li>
 <li class="list-group-item">id - {{team.id}}</li>
 
+{% if user == team.owner or user in team.members.all%}
+{%else%}
 
-<a class="btn btn-primary" href="{%url 'airsoft_membership:create_request' team.pk %}" role="button"> Вступить </a>
+
+<form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_requsete" value="add_requsete" type="submit"> Create </button></form>
+
+{%endif%}
 
 
+{% if user == team.owner or user  in team.members.all%}
 
 <p><li class="list-group-item">user request</li></p>
+<form method="post"> {% csrf_token %}
+{%for user in team.request_user.all %}
+<li class="list-group-item">{{ user }}  {{ user.id }}</li>
 
-{%for requset in team.membership_request.all %}
-<li class="list-group-item">{{ requset.user }}</li>
+    <button class="btn btn-outline-primary btn-sm" name="add" value="{{user.id}}"  type="submit">
+        add </button>
+
+    <button class="btn btn-outline-primary btn-sm" name="refuse" value="{{user.id}}"  type="submit">
+        refuse </button>
+</form>
 {%endfor%}
 
 
-<p><li class="list-group-item">some shit</li></p>
-{%for member in team.user_group.members.all %}
+<p><li class="list-group-item">Member list</li></p>
+<form method="post"> {% csrf_token %}
+{%for member in team.members.all %}
 <li class="list-group-item">{{ member }}</li>
+    <form method="post"> {% csrf_token %}
+    <button class="btn btn-outline-primary btn-sm" name="kick" value="{{member.id}}"  type="submit">
+        kick </button>
+</form>
 {%endfor%}
+
+{%else%}
+{%endif%}
+
+
+
+
+
 
 {% endblock %}

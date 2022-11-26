@@ -1,5 +1,6 @@
-
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import AbstractUser
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from airsoft_teams.models import Team
@@ -10,6 +11,7 @@ from .forms import BasicGroupForms
 
 # Create your views here.
 
+UserModel: AbstractUser = get_user_model()
 
 class CreateTeamView(CreateView, LoginRequiredMixin):
     model = BasicGroup
@@ -28,15 +30,15 @@ class CreateTeamView(CreateView, LoginRequiredMixin):
                 if request.POST.get("team"):
                     team = Team.objects.create(user_group=obj)
                     team.save()
-                    return HttpResponseRedirect('/')
+                    return HttpResponseRedirect("/teams/%s" % team.pk)
                 if request.POST.get("organization"):
                     org = Organization.objects.create(user_group=obj)
                     org.save()
-                    return HttpResponseRedirect('/')
+                    return HttpResponseRedirect("/teams/%s" % org.pk)
                 if request.POST.get("shop"):
                     shop = Organization.objects.create(user_group=obj)
                     shop.save()
-                    return HttpResponseRedirect('/')
+                    return HttpResponseRedirect("/")
 
                 else:
                     return HttpResponseRedirect('/')
@@ -46,10 +48,60 @@ class CreateTeamView(CreateView, LoginRequiredMixin):
             return HttpResponseRedirect('/')
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# make simpl way and make check's in templates members\owner and don't show button
+# moved to detail view teams
+
 class CreateRequest(CreateView, LoginRequiredMixin):
     model = MembershipRequest
     fields = []
     def post(self, request, *args, **kwargs):
+        # group = get_object_or_404(BasicGroup, pk=self.kwargs['pk'])
+        # MembershipRequest.objects.create(group=group, user=self.request.user)
+
         group = get_object_or_404(BasicGroup, pk=self.kwargs['pk'])
         user = self.request.user
         if user not in group.members.all():
@@ -64,20 +116,27 @@ class CreateRequest(CreateView, LoginRequiredMixin):
 
 
 
-
-class MemberManager(UpdateView, LoginRequiredMixin):
+class AddRequestByUser(UpdateView, LoginRequiredMixin):
     model = BasicGroup
-    form_class = BasicGroupForms
+    fields = []
+
+    # def form_valid(self, form):
+    #     obj = form.save(commit=False)
+    #     user = self.request.user
+    #     if user not in obj.members.all():
+    #         if user != obj.owner:
+    #             obj.request_user = user
+    #             obj.save()
+    #             return HttpResponseRedirect("/teams/%s" % group.pk)
+    #     return HttpResponseRedirect("/teams/%s" % group.pk)
+
+
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
+            if request.POST.get("add_requsete"):
+                group = get_object_or_404(BasicGroup, pk=self.kwargs["pk"])
+                user_request = self.request.user
+                self.object.add_requsete(user_request)
 
-            if request.POST.get("apply_user"):
-                # user =
-                self.object.members.add(user)
 
-                return HttpResponseRedirect('/')
-            if request.POST.get("refuse_user"):
 
-                return HttpResponseRedirect('/')
-        else:
-            return HttpResponseRedirect('/')

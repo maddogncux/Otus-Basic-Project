@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 from django.db import models
-
+from  airsoft_membership.models import BasicGroup
 # Create your models here.
 
 
