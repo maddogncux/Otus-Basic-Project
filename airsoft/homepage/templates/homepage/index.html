@@ -1,13 +1,19 @@
 {% extends 'homepage/base.html' %}
 
-
+{%  block navigation %}
+{% endblock %}
 
 {% block title %}
-
-
-
 {% endblock %}
 
 
 {% block body %}
+{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'airsoft_membership:create' %}"> Create - team - org - shop </a></p>
+<p><a href="{% url 'airsoft_teams:teams' %}"> team-list </a></p>
+<p><a href="{% url 'airsoft_organization:orgs' %}"> org-list </a></p>
+<p><a href="{% url 'airsoft_teams:teams' %}"> shop-list </a></p>
+<p><a href="{% url 'airsoft_teams:teams' %}"> event-list </a></p>
 {% endblock %}

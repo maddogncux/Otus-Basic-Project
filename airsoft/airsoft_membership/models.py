@@ -16,6 +16,7 @@ class BasicGroup(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     city = models.CharField(max_length=64, blank=False, null=False)
     is_private = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     if TYPE_CHECKING:
         objects: models.Manager

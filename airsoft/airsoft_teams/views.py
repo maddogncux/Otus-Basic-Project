@@ -20,45 +20,4 @@ class TeamListView(ListView):
                 .all())
 
 
-class TeamDetailView(DetailView):
-    context_object_name = "team"
-    model = BasicGroup
-    template_name = "team_detail.html"
-    queryset = (BasicGroup
-                .objects
-                # .select_related("user_group")
-                .prefetch_related("membership_request")
-                )
 
-    def post(self, request, *args, **kwargs,):
-        print(self.kwargs)
-        print(self.args)
-        if request.method == 'POST':
-            for key, value in request.POST.items():
-                print('Key: %s' % (key))
-                # print(f'Key: {key}') in Python >= 3.7
-                print('Value %s' % (value))
-                # print(f'Value: {value}') in Python >= 3.7
-
-            group = get_object_or_404(BasicGroup, pk=self.kwargs["pk"])
-            if request.POST.get("add_requsete"):
-                user_request = self.request.user
-                BasicGroup.add_request(group, user_request)
-                return HttpResponseRedirect("/teams/%s" % group.id)
-
-            if request.POST.get("add"):
-                new_member = get_object_or_404(UserModel, pk=value)
-                print(new_member)
-                BasicGroup.add_member(group, new_member)
-                return HttpResponseRedirect("/teams/%s" % group.id)
-
-            if request.POST.get("kick"):
-                user_request = get_object_or_404(UserModel, pk=value)
-                BasicGroup.kick_member(group, user_request)
-                return HttpResponseRedirect("/teams/%s" % group.id)
-
-            if request.POST.get("refuse"):
-                user_request = get_object_or_404(UserModel, pk=value)
-                BasicGroup.refuse_request(group, user_request)
-                return HttpResponseRedirect("/teams/%s" % group.id)
-        return HttpResponseRedirect("/teams/%s" % group.id)
