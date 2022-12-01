@@ -143,6 +143,7 @@ class KickMember(UpdateView, LoginRequiredMixin):
 
     # work once without get_object
     def get_object(self, queryset=None):
+
         return Teams.objects.get(slug=self.kwargs['slug'])
 
     def post(self, request, *args, **kwargs):

@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from django.db import models
 
 # Create your models here.
+from django.urls import reverse
 
 
 class Event(models.Model):
@@ -11,7 +12,7 @@ class Event(models.Model):
                               on_delete=models.PROTECT,
                               related_name="event_owner"
                               )
-    polygon = models.ForeignKey("airsoft_polygon.Polygon", on_delete=models.PROTECT, blank=True)
+    polygon = models.ForeignKey("airsoft_polygon.Polygon", on_delete=models.PROTECT, blank=True,null=True)
     Description = models.TextField(blank=True, null=True)
     banner = models.ImageField(upload_to='event_banner', blank=True)
     arrival_date = models.DateField()
@@ -25,4 +26,8 @@ class Event(models.Model):
     if TYPE_CHECKING:
         objects: models.Manager
 
-    def open
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("/event/%s" % self.pk)

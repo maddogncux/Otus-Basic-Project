@@ -1,0 +1,16 @@
+{% extends 'homepage/base.html' %}
+
+
+{% block title %}
+teams
+{% endblock %}
+
+{% block body %}
+{% for shop in shops %}
+<li class="list-group-item"><a href="{% url 'airsoft_shops:shop' shop.pk %}">{{ shop.name }}</a></li>
+
+{% endfor %}
+
+<a href="{% url 'airsoft_shops:shop_create' %}" class="btn btn-outline-secondary btn-sm">Create</a>
+
+{% endblock %}

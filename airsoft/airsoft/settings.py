@@ -64,10 +64,10 @@ INSTALLED_APPS = [
     "airsoft_teams.apps.AirsoftTeamsConfig",
     'airsoft_membership.apps.AirsoftMembermanagerConfig',
     "airsoft_gear.apps.AirsoftGearConfig",
-    "airsoft_organization.apps.AirsoftOrganizationConfig"
-
-
-
+    "airsoft_organization.apps.AirsoftOrganizationConfig",
+    "airsoft_event.apps.AirsoftEventConfig",
+    "airsoft_polygon.apps.AirsoftPolygonConfig",
+    "airsoft_shops.apps.AirsoftShopsConfig",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

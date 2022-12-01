@@ -1,0 +1,16 @@
+{% extends 'homepage/base.html' %}
+
+
+{% block title %}
+teams
+{% endblock %}
+
+{% block body %}
+{% for org in orgs %}
+<li class="list-group-item"><a href="{% url 'airsoft_organization:org_details' org.pk %}">{{ org.name }}</a></li>
+
+{% endfor %}
+
+<a href="{% url 'airsoft_organization:org_create' %}" class="btn btn-outline-secondary btn-sm">Create</a>
+
+{% endblock %}

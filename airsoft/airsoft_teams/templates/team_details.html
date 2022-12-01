@@ -12,27 +12,30 @@ teams
 <li class="list-group-item">name - {{team.name}}</li>
 <li class="list-group-item">owner - {{team.owner}}</li>
 <li class="list-group-item">id - {{team.id}}</li>
-
-{% if user == team.owner or user in team.members.all%}
+<li class="list-group-item">id - {{team.created_at}}</li>
+<li class="list-group-item">id - {{team.edited_at}}</li>
+<li class="list-group-item">id - {{team.is_private}}</li>
+{{team.user_group.members}}
+{% if user == team.owner or user in team.user_group.members.all%}
 {%else%}
 
 
-<form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_requsete" value="add_requsete" type="submit"> Create </button></form>
+<form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> Create </button></form>
 
 {%endif%}
 
 
-{% if user == team.owner or user  in team.members.all%}
+{% if user == team.owner or user  in team.user_group.members.all%}
 
 <p><li class="list-group-item">user request</li></p>
 <form method="post"> {% csrf_token %}
-{%for user in team.request_user.all %}
+{%for user in team.user_group.request_user.all %}
 <li class="list-group-item">{{ user }}  {{ user.id }}</li>
 
-    <button class="btn btn-outline-primary btn-sm" name="add" value="{{user.id}}"  type="submit">
+    <button class="btn  btn-outline-secondary btn-sm" name="add" value="{{user.id}}"  type="submit">
         add </button>
 
-    <button class="btn btn-outline-primary btn-sm" name="refuse" value="{{user.id}}"  type="submit">
+    <button class="btn btn-outline-secondary btn-sm" name="refuse" value="{{user.id}}"  type="submit">
         refuse </button>
 </form>
 {%endfor%}
@@ -40,10 +43,10 @@ teams
 
 <p><li class="list-group-item">Member list</li></p>
 <form method="post"> {% csrf_token %}
-{%for member in team.members.all %}
+{%for member in team.user_group.members.all %}
 <li class="list-group-item">{{ member }}</li>
     <form method="post"> {% csrf_token %}
-    <button class="btn btn-outline-primary btn-sm" name="kick" value="{{member.id}}"  type="submit">
+    <button class="btn btn-outline-secondary btn-sm" name="kick" value="{{member.id}}"  type="submit">
         kick </button>
 </form>
 {%endfor%}

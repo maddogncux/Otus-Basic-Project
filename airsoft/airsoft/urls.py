@@ -22,10 +22,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include("homepage.urls")),
     path("teams/", include("airsoft_teams.urls")),
-    path("membership/", include("airsoft_membership.urls")),
+    # path("membership/", include("airsoft_membership.urls")),
     path('organization/', include("airsoft_organization.urls")),
-
-
+    path('events/', include("airsoft_event.urls")),
+    path('shops/', include("airsoft_shops.urls")),
 
     path("admin/", admin.site.urls),
     # path('events/', include("event.urls")),

@@ -1,0 +1,24 @@
+{% extends 'homepage/base.html' %}
+
+{% block title %}
+Creat shop
+
+{% endblock %}
+
+{% block body %}
+
+
+{% endblock %}
+
+{% block content %}
+
+<form method="post" >
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button class="btn btn-outline-secondary btn-sm" type="submit" name="team" value="team" >Creat</button>
+     <a href="{% url 'airsoft_teams:teams' %}" class="btn btn-outline-secondary btn-sm">Back</a>
+</form>
+
+
+{% endblock %}
