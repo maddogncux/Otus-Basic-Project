@@ -21,7 +21,8 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(auto_now=True)
     # slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
-
+    registration_open = models.BooleanField(default=False)
+    solo_allowed = models.BooleanField(default=False)
 
     if TYPE_CHECKING:
         objects: models.Manager
@@ -31,3 +32,13 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         return reverse("/event/%s" % self.pk)
+
+
+class Sides(models.Model):
+    name = models.CharField(max_length=128)
+    hidden_scenario = models.BooleanField(default=False)
+    scenario = models.ForeignKey("airsoft_event.Scenario", on_delete=models.CASCADE, blank=True,null=True)
+
+
+class Scenario(models.Model):
+    pass

@@ -4,32 +4,81 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
 # Create your models here.
+
+
 UserModel: AbstractUser = get_user_model()
 
-
-class EventRegistration(models.Model):
-    event = models.ForeignKey("airsoft_event.Event", related_name="registration", on_delete=models.CASCADE)
-    registration_open = models.BooleanField(default=False)
-    solo_allowed = models.BooleanField(default=False)
+# move to event
 
 
-class Sides(models.Model):
-    registration = models.ForeignKey(EventRegistration, related_name="event_registration", on_delete=models.CASCADE)
-    name = models.CharField(max_length=128)
+
 
 
 class TeamRegistration(models.Model):
-    sides = models.ForeignKey("airsoft_teams.Sides", related_name="team_on_side",)
+    event = models.ForeignKey("airsoft_event.Event", on_delete=models.CASCADE)
+    side = models.ForeignKey("airsoft_event.Sides", on_delete=models.PROTECT)
     team = models.ForeignKey("airsoft_teams.Team", related_name="team_registration", on_delete=models.CASCADE)
-    players = models.ManyToManyField("airsoft_registration.Player", related_name="regd_player")
+    players = models.ManyToManyField(UserModel, through="airsoft_registration.Player", related_name="regd_players")
+    created_at = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
+    approved = models.BooleanField(default=False)
+
+    # services = models.ManyToManyField(services,related_name="add_team_services")
+
+    def add_player(self, user):
+        player = Player.get_or_create(team_reg=self.object, user=user)
+        self.players.add(player)
+        self.save()
+        return self
+
+    def loose_player(self, user):
+        self.players.remove(user)
+        self.save()
+        return self
+
+    def change_side(self, side):
+        self.side = side
+        self.save()
+        return self
 
 
 class Player(models.Model):
-    user = models.ManyToManyField(UserModel, related_name="player")
+    team = models.ForeignKey("airsoft_registration.TeamRegistration", on_delete=models.CASCADE)
+    user = models.ForeignKey(UserModel, related_name="player", on_delete=models.CASCADE)
     is_paid = models.BooleanField(default=False)
+    paid_time = models.DateTimeField(blank=True,null=True)
+    approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # services = models.ManyToManyField(services,related_name="add_player_services")
 
 
-class TeamBlock(models.Model):
-    team = models.ManyToManyField(UserModel, related_name="event_to_go",)
+
+
+
+class EventVote(models.Model):
+    event = models.ForeignKey("airsoft_event.Event", on_delete=models.CASCADE)
+    team = models.ForeignKey("airsoft_teams.Team", on_delete=models.CASCADE, related_name="event_vote")
+    yes = models.ManyToManyField(UserModel, related_name="Yes_player", blank=True)
+    no = models.ManyToManyField(UserModel, related_name="No_player", blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def i_go(self, user):
+        self.yes.add(user)
+        self.no.remove(user)
+        self.save()
+        return self
+
+    def not_go(self, user):
+        self.yes.remove(user)
+        self.no.add(user)
+        self.save()
+        return self
+
+    def self_delete(self):
+        self.delete()
+
+
+
+

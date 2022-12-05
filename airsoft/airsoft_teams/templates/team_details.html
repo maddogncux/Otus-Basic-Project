@@ -51,6 +51,31 @@ teams
 </form>
 {%endfor%}
 
+<p><li class="list-group-item">Event list</li></p>
+<form method="post"> {% csrf_token %}
+{% if user == team.owner%}
+    <button class="btn btn-outline-secondary btn-sm" name="reg_on_vote" value="{{vote.id}}"  type="submit">
+        reg_based_on_vote</button>
+    <button class="btn btn-outline-secondary btn-sm" name="remove_vote" value="{{vote.id}}"  type="submit">
+        remove_vote</button>
+    {%endif%}
+    {%for vote in team.event_vote.all %}
+<li class="list-group-item">do we go to - {{ vote.event }}? </li>
+
+
+    <form method="post"> {% csrf_token %}
+    <button class="btn btn-outline-secondary btn-sm" name="yes" value="{{vote.id}}"
+            type="submit">Yes:{{vote.yes.count}}
+    </button>
+        <button
+                class="btn btn-outline-secondary btn-sm" name="no" value="{{vote.id}}"
+                type="submit">
+        No:{{vote.no.count}}
+        </button>
+</form>
+{%endfor%}
+
+
 {%else%}
 {%endif%}
 

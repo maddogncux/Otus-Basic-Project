@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     "airsoft_event.apps.AirsoftEventConfig",
     "airsoft_polygon.apps.AirsoftPolygonConfig",
     "airsoft_shops.apps.AirsoftShopsConfig",
+    "airsoft_registration.apps.AirsoftRegistrationConfig",
+
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
