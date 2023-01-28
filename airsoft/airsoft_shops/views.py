@@ -6,8 +6,8 @@ from django.shortcuts import get_object_or_404
 # Create your views here.
 from django.views.generic import ListView, CreateView, DetailView
 
-from airsoft_membership.models import BasicGroup
-from airsoft_shops.models import Shop
+
+from airsoft_shops.models import Shop, Member
 
 # Create your views here.
 
@@ -24,11 +24,19 @@ class ShopCreate(CreateView):
     fields = ["name", "city", "description", "logo", "address", "gps"]
 
     def form_valid(self, form):
+        user = self.request.user
+        # user_in_team = Team.objects.filter(members=user)
+        # if len(user_in_team) == 1:
+        #     return HttpResponseRedirect("/teams/create/")
+        # else:
+        #     # go = None  # optio
         obj = form.save(commit=False)
-        obj.owner = self.request.user
-        obj.membership = BasicGroup.objects.create()
         obj.save()
-        return super().form_valid(form)
+        obj.members.add(user)
+        form.save_m2m()
+        change_role = get_object_or_404(Member, user=user, team=obj)
+        Member.set_owner(change_role)
+        return HttpResponseRedirect("/shops/%s" % obj.id)
 
 
 class ShopListView(ListView):

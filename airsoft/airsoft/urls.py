@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include("homepage.urls")),
     path("teams/", include("airsoft_teams.urls")),
-    # path("membership/", include("airsoft_membership.urls")),
+
     path('organization/', include("airsoft_organization.urls")),
     path('events/', include("airsoft_event.urls")),
     path('shops/', include("airsoft_shops.urls")),
@@ -33,7 +33,9 @@ urlpatterns = [
     # path('teams/', include("teams.urls")),
     # path('org/', include("org.urls")),
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
 
 
 # admin if debug

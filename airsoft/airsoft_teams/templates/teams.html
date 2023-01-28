@@ -1,20 +1,66 @@
 {% extends 'homepage/base.html' %}
 
 
+{%block navbartop%}
+   <div class="col-xs-12 col-md-10">
+    <a href="{% url 'airsoft_teams:create' %}" class="btn btn-outline-secondary btn-sm">Create</a>
+{% endblock %}
 
 
-{% block title %} some shit{% endblock %}
 
 {% block body %}
 
+<div class="row row-cols-3 row-cols-md-5 g-4">
 
-{% for team in teams %}
-<li class="list-group-item"><a href="{% url 'airsoft_teams:team' team.pk %}">{{ team.name }}</a></li>
+    <div class="card h-100">
+      <img src="media/nopic.jpeg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Creat</h5>
+        <p class="card-text"> Team</p>
+      <a class="stretched-link" href="{% url 'airsoft_teams:create' %}"></a>
+      </div>
+    </div>
+
+  {% for team in teams %}
+<div class="col">
+    <div class="card h-100">
+      <img src={{ team.chevron.url }} class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{ team.name }}</h5>
+        <p class="card-text">{{ team.description }}</p>
+      <a class="stretched-link" href="{% url 'airsoft_teams:team' team.pk %}"></a>
+      </div>
+    </div>
+
+</div>
 
 {% endfor %}
+</div>
 
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}
+
+{% block title %}{% endblock %}
+
+
 
 {% block content %}
-<a href="{% url 'airsoft_teams:create' %}" class="btn btn-outline-secondary btn-sm">Create</a>
+
 {% endblock %}
+

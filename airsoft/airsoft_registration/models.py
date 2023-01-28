@@ -47,7 +47,7 @@ class Player(models.Model):
     team = models.ForeignKey("airsoft_registration.TeamRegistration", on_delete=models.CASCADE)
     user = models.ForeignKey(UserModel, related_name="player", on_delete=models.CASCADE)
     is_paid = models.BooleanField(default=False)
-    paid_time = models.DateTimeField(blank=True,null=True)
+    paid_time = models.DateTimeField(blank=True, null=True)
     approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

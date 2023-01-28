@@ -14,10 +14,10 @@ class Polygon(models.Model):
     description = models.TextField(blank=True)
 
 
-
 class PolygonPhoto(models.Model):
     polygon = models.ForeignKey(Polygon, related_name="photo", on_delete=models.CASCADE)
     photo = models.ImageField(upload_to="polygon")
+
 
 class Maps(models.Model):
     polygon = models.ForeignKey(Polygon, related_name="maps", on_delete=models.CASCADE)

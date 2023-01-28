@@ -12,6 +12,22 @@ UserModel: AbstractUser = get_user_model()
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+    avatar = models.ImageField(upload_to="avatars", default="no_avatar.png")
+    city = models.CharField(max_length=32, null=True) # to citys
+    country = models.CharField(max_length=32, null=True) # to country
+    gear = models.CharField(max_length=32, null=True) # m2m to gear cat
+    weapons = models.CharField(max_length=32, null=True) # m2m to car aegs(gear)
+    car = models.CharField(max_length=32, null=True) # m2m to car
+    bbs = models.CharField(max_length=32, null=True) # m2m to bbs(gear)
+    birthday = models.DateField(null=True)
+    friend_list = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="friend")
+
+
+
+
+
+
+    is_privet = models.BooleanField(default=False)
 
     if TYPE_CHECKING:
         objects: models.Manager
@@ -26,3 +42,12 @@ def user_saved_handler(instance: UserModel, created: bool, **kwargs):
         return
 
     UserProfile.objects.create(user=instance)
+
+
+class Car(models.Model):
+    color = models.CharField(max_length=32, null=True)
+    number = models.CharField(max_length=32, null=True)
+    car_brand = models.CharField(max_length=32, null=True)
+    model = models.CharField(max_length=32, null=True)
+    combat_car = models.BooleanField(default=False)
+

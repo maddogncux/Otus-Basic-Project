@@ -27,10 +27,13 @@ Organization
     <button class="btn btn-outline-secondary btn-sm" name="vote" value="vote"  type="submit"> vote </button>
 </form>
 
+<form method="post">
+    {% csrf_token %}
+    <a href="{% url 'airsoft_event:team_reg' event.pk %}" class="btn btn-outline-secondary btn-sm">reg</a>
+</form>
 
 
-
-
+registration
 
 
 {% endblock %}

@@ -1,41 +1,42 @@
 {% extends 'homepage/base.html' %}
 
 
-{% block title %}
-teams
-{% endblock %}
+
 
 {% block body %}
 <p>team :</p>
-<li class="list-group-item">city - {{team.city}}</li>
-<li class="list-group-item">описание - {{team.team_owner.description}}</li>
+
+{{user.team_profile.role}}
+
 <li class="list-group-item">name - {{team.name}}</li>
-<li class="list-group-item">owner - {{team.owner}}</li>
+<li class="list-group-item">city - {{team.city}}</li>
+<li class="list-group-item">description - {{team.description}}</li>
+
 <li class="list-group-item">id - {{team.id}}</li>
-<li class="list-group-item">id - {{team.created_at}}</li>
-<li class="list-group-item">id - {{team.edited_at}}</li>
-<li class="list-group-item">id - {{team.is_private}}</li>
-{{team.user_group.members}}
-{% if user == team.owner or user in team.user_group.members.all%}
+<li class="list-group-item">created_at - {{team.created_at}}</li>
+<li class="list-group-item">edited_at - {{team.edited_at}}</li>
+<li class="list-group-item">is_private - {{team.is_private}}</li>
+<img src={{team.chevron.url }}>
+
+{% if user  in team.members.all %}
+
 {%else%}
-
-
-<form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> Create </button></form>
-
+<form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> request </button></form>
 {%endif%}
 
 
-{% if user == team.owner or user  in team.user_group.members.all%}
+
+
 
 <p><li class="list-group-item">user request</li></p>
 <form method="post"> {% csrf_token %}
-{%for user in team.user_group.request_user.all %}
-<li class="list-group-item">{{ user }}  {{ user.id }}</li>
+{%for request in team.team_request.all %}
+<li class="list-group-item">name - {{ request }}  userid - {{ request.user.id }}  reqID-{{request.id}}</li>
 
-    <button class="btn  btn-outline-secondary btn-sm" name="add" value="{{user.id}}"  type="submit">
+    <button class="btn  btn-outline-secondary btn-sm" name="add" value="{{request.id}}"  type="submit">
         add </button>
 
-    <button class="btn btn-outline-secondary btn-sm" name="refuse" value="{{user.id}}"  type="submit">
+    <button class="btn btn-outline-secondary btn-sm" name="refuse" value="{{request.id}}"  type="submit">
         refuse </button>
 </form>
 {%endfor%}
@@ -43,22 +44,22 @@ teams
 
 <p><li class="list-group-item">Member list</li></p>
 <form method="post"> {% csrf_token %}
-{%for member in team.user_group.members.all %}
-<li class="list-group-item">{{ member }}</li>
+{%for member in team.team_members.all %}
+<li class="list-group-item">user -{{ member.user }} id - {{ member.user.id }} created_at -{{member.created_at}} edited -{{member.edited_at}}role - {{member.get_role_display}}</li>
     <form method="post"> {% csrf_token %}
-    <button class="btn btn-outline-secondary btn-sm" name="kick" value="{{member.id}}"  type="submit">
+    <button class="btn btn-outline-secondary btn-sm" name="kick" value="{{member.user.id}}"  type="submit">
         kick </button>
 </form>
 {%endfor%}
 
 <p><li class="list-group-item">Event list</li></p>
 <form method="post"> {% csrf_token %}
-{% if user == team.owner%}
+
     <button class="btn btn-outline-secondary btn-sm" name="reg_on_vote" value="{{vote.id}}"  type="submit">
         reg_based_on_vote</button>
     <button class="btn btn-outline-secondary btn-sm" name="remove_vote" value="{{vote.id}}"  type="submit">
         remove_vote</button>
-    {%endif%}
+
     {%for vote in team.event_vote.all %}
 <li class="list-group-item">do we go to - {{ vote.event }}? </li>
 
@@ -75,9 +76,6 @@ teams
 </form>
 {%endfor%}
 
-
-{%else%}
-{%endif%}
 
 
 

@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 # Create your views here.
 from django.views.generic import CreateView, ListView, DetailView
 
-from airsoft_organization.models import Organization
+from airsoft_organization.models import Organization, Member
 from airsoft_registration.models import EventVote
 from airsoft_teams.models import Team
 from .forms import EventCreateForm
@@ -17,16 +17,18 @@ class EventCreateViews(CreateView):
     template_name = "event_create.html"
 
     def form_valid(self, form):
-        org = get_object_or_404(Organization, pk=self.kwargs["pk"])
-        if Organization.can_create_event(org, user=self.request.user):
+        # org = get_object_or_404(Organization, pk=self.kwargs["pk"])
+        member = get_object_or_404(Member, org_id=self.kwargs["pk"], user=self.request.user)
+        if Organization.can_create_event(member.org, member):
             obj = form.save(commit=False)
-            obj.owner = org
+            obj.owner = member.org
             obj.save()
-            return super().form_valid(form)
+            return HttpResponseRedirect("/events/%s" % obj.id)
         else:
-            return HttpResponseRedirect("/organization/%s" % org.pk)
+            return HttpResponseRedirect("/organization/%s" % self.kwargs["pk"])
 
 class EventListVies(ListView):
+    paginate_by = 14
     context_object_name = "events"
     template_name = "events.html"
     model = Event
@@ -47,7 +49,7 @@ class EventDetails(DetailView):
             print(self.args)
             event = get_object_or_404(Event, pk=self.kwargs["pk"])
             if request.POST.get("vote"):
-                team = get_object_or_404(Team, owner=self.request.user) #not good idea
+                team = get_object_or_404(Team, members=self.request.user) #not good idea
                 EventVote.objects.get_or_create(event=event, team=team)
 
                 return HttpResponseRedirect("/events/%s" % event.id)

@@ -7,11 +7,57 @@
 
 {% block body %}
 
-
+<div class="row row-cols-1 row-cols-md-6 g-4">
 {% for event in events %}
-<li class="list-group-item"><a href="{% url 'airsoft_event:event' event.pk %}">{{ event.name }}</a></li>
+<div class="col">
+    <div class="card h-100">
+      <img src={{ event.banner.url }} class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{ event.name }}</h5>
+        <p class="card-text">{{ event.description }}</p>
+      <a class="stretched-link" href="{% url 'airsoft_event:event' event.pk %}"></a>
+      </div>
+    </div>
+
+</div>
 
 {% endfor %}
+</div>
+<div class="pagination">
+    <span class="step-links">
+        {% if event.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ event.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ event.number }} of {{ event.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ event.next_page_number }}">next</a>
+            <a href="?page={{ event.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 
 {% endblock %}
 

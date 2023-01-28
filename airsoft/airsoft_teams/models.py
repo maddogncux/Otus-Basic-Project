@@ -4,10 +4,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
-from django.shortcuts import get_object_or_404
-from django.urls import reverse
 
 UserModel: AbstractUser = get_user_model()
 
@@ -16,9 +15,9 @@ class Team(models.Model):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     city = models.CharField(max_length=64, blank=False, null=False)
     description = models.TextField()
-    chevron = models.ImageField(upload_to='chevron', blank=True)
-    pattern = models.ManyToManyField("airsoft_gear.Pattern", blank=True)
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through="airsoft_teams.Members")
+    chevron = models.ImageField(upload_to='chevron/', blank=True, default='nopic.jpeg')
+    pattern = models.ManyToManyField("airsoft_gear.Pattern", blank=True, default='nopic.jpeg')
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through="airsoft_teams.Members", related_name="memb")
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(auto_now=True)
     is_private = models.BooleanField(default=False)
@@ -34,17 +33,25 @@ class Team(models.Model):
 
     def send_request(self, user):
         if user not in self.members.all():
-            TeamRequest.objects.get_or_create(team=self.object, user=user)
+            TeamRequest.objects.get_or_create(team=self, user=user)
             return Team
 
-    def add_member(self, user):
-        if user not in self.members.all():
-            self.members.add(user)
+    def user_in_team(self, user):
+        if user in self.members.all():
+            return True
+        else:
+            return False
+
+    def add_member(self, team_request):
+        if team_request.user not in self.members.all():
+            self.members.add(team_request.user)
             self.save()
+            team_request.delete()
             return Team
 
-    def refuse_request(self, request):
-        request.delete()
+    @staticmethod
+    def refuse_request(team_request):
+        team_request.delete()
         return Team
 
     def kick_member(self, user):
@@ -52,30 +59,8 @@ class Team(models.Model):
         self.save()
         return Team
 
-    # def set_owner(self, user):
-    #     obj = Members.objects.get(user=user, team=self)
-    #     obj.role = ROLE_OWNER
-    #     obj.save
-    #     return Team
 
-class Role(models.Model):
 
-    FRIEND = 1
-    MEMBER = 2
-    MANAGER = 3
-    OWNER = 4
-    ROLE_CHOICES = (
-        (FRIEND, 'friend'),
-        (MEMBER, 'member'),
-        (MANAGER, 'manager'),
-        (OWNER, 'owner'),
-
-    )
-
-    id = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, primary_key=True)
-
-    def __str__(self):
-        return self.get_id_display()
 
 
 class Members(models.Model):
@@ -91,25 +76,37 @@ class Members(models.Model):
 
     )
     team = models.ForeignKey("airsoft_teams.Team", on_delete=models.CASCADE, related_name="team_members")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="team_profile")
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(auto_now=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=FRIEND)
+    main = models.BooleanField(default=False)                                                                               # chek if user in many teams
     # role = models.ForeignKey("airsoft_teams.Role", on_delete=models.SET_NULL, null=True)
     # role
 
     def __str__(self):
-        return self.team.name
+        return self.user.username
 
     def set_owner(self):
-        # self.role = get_object_or_404(Role, pk=4)
         self.role = 4
+        self.main = True
+        self.save()
+        return Members
+
+    def set_role(self, role):
+        self.role = role
         self.save()
         return Members
 
 
-
 class TeamRequest(models.Model):
-    team = models.ForeignKey("airsoft_teams.Team", on_delete=models.CASCADE)
+    team = models.ForeignKey("airsoft_teams.Team", on_delete=models.CASCADE, related_name="team_request")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    # body = models.TextField()
+    def __str__(self):
+        return self.user.username
+
+    # def refuse_request(self):
+    #     self.delete()
+    #     return Team

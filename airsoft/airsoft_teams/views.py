@@ -7,9 +7,9 @@ from django.shortcuts import get_object_or_404
 
 from django.views.generic import ListView, DetailView, CreateView
 
-from airsoft_membership.models import BasicGroup
+
 from airsoft_registration.models import EventVote
-from airsoft_teams.models import Team, Members
+from airsoft_teams.models import Team, Members, TeamRequest
 
 UserModel: AbstractUser = get_user_model()
 
@@ -22,14 +22,19 @@ class TeamCreate(CreateView):
     fields = ["name", "city", "description", "chevron", "pattern", "is_private"]
 
     def form_valid(self, form):
+        user = self.request.user
+        user_in_team = Team.objects.filter(members=user)
+        # if len(user_in_team) == 1:
+        #     return HttpResponseRedirect("/teams/create/")
+        # else:
+        #     # go = None  # optio
         obj = form.save(commit=False)
         obj.save()
-        user = self.request.user
         obj.members.add(user)
         form.save_m2m()
-        mem = get_object_or_404(Members,user=user, team=obj)
-        Members.set_owner(mem)
-        return super().form_valid(form)
+        change_role = get_object_or_404(Members, user=user, team=obj)
+        Members.set_owner(change_role)
+        return HttpResponseRedirect("/teams/%s" % obj.id)
 
 
 class TeamListView(ListView):
@@ -41,44 +46,61 @@ class TeamListView(ListView):
                 # .prefetch_related()
                 .all())
 
+class TeamMemberDetails(DetailView):
+# class TeamDetails(DetailView):
+    template_name = 'team_details.html'
+    model = Team
 
 class TeamDetails(DetailView):
-    template_name = 'team_details.html'
-    queryset = Team.objects.prefetch_related("event_vote")
+# class TeamMemberDetails(DetailView):
+    template_name = 'team_member_details.html'
+    queryset = Team\
+        .objects\
+        .prefetch_related("team_request", "event_vote", "team_members")\
+        .select_related()
+
+
+
+
 
 
     def post(self, request, *args, **kwargs, ):
         if request.method == 'POST':
             print("get post")
             for key, value in request.POST.items():
-                print("chek keys")
+                print("check keys")
                 print('Key: %s' % (key))
                 print('Value %s' % (value))
-            group = get_object_or_404(BasicGroup, pk=self.kwargs["pk"])
-            print("get groupe")
+            team = get_object_or_404(Team, pk=self.kwargs["pk"])
+            print("get group")
             if request.POST.get("add_request"):
                 print("add_request")
-                BasicGroup.add_request(group, user=self.request.user)
-                return HttpResponseRedirect("/teams/%s" % group.id)
+                Team.send_request(team, user=self.request.user)
+                return HttpResponseRedirect("/teams/%s" % team.id)
             else:
-
+                # if request.POST.get("add"):
+                #     user = get_object_or_404(UserModel, pk=value)
+                #     print("add")
+                #     Team.add_member(team, user)
+                #     return HttpResponseRedirect("/teams/%s" % team.id)
                 if request.POST.get("add"):
-                    member = get_object_or_404(UserModel, pk=value)
+                    team_request = get_object_or_404(TeamRequest, pk=value)
                     print("add")
-                    BasicGroup.add_member(group,  member)
-                    return HttpResponseRedirect("/teams/%s" % group.id)
+                    Team.add_member(team_request.team, team_request)
+                    return HttpResponseRedirect("/teams/%s" % team.id)
 
                 if request.POST.get("kick"):
-                    member = get_object_or_404(UserModel, pk=value)
+                    user = get_object_or_404(UserModel, pk=value)
                     print("kick")
-                    BasicGroup.kick_member(group, member)
-                    return HttpResponseRedirect("/teams/%s" % group.id)
+                    Team.kick_member(team, user)
+                    return HttpResponseRedirect("/teams/%s" % team.id)
 
                 if request.POST.get("refuse"):
-                    member = get_object_or_404(UserModel, pk=value)
+                    teamreq = get_object_or_404(TeamRequest, pk=value)
+                    teamreq.delete()
                     print("refuse")
-                    BasicGroup.refuse_request(group, member)
-                    return HttpResponseRedirect("/teams/%s" % group.id)
+                    # Team.refuse_request(team, user)
+                    return HttpResponseRedirect("/teams/%s" % team.id)
 
                 if request.POST.get("yes"):
                     print("yes")
@@ -87,7 +109,7 @@ class TeamDetails(DetailView):
                     user = self.request.user
                     print(user)
                     EventVote.i_go(vote, user)
-                    return HttpResponseRedirect("/teams/%s" % group.id)
+                    return HttpResponseRedirect("/teams/%s" % team.id)
 
                 if request.POST.get("no"):
                     print("no")
@@ -96,15 +118,15 @@ class TeamDetails(DetailView):
                     user = self.request.user
                     print(user)
                     EventVote.not_go(vote, user)
-                    return HttpResponseRedirect("/teams/%s" % group.id)
+                    return HttpResponseRedirect("/teams/%s" % team.id)
 
                 if request.POST.get("vote_reg"):
                     print("vote_reg")
                     vote = get_object_or_404(EventVote, pk=value)
                     EventVote.vote_registration(vote, side)
-                    return HttpResponseRedirect("/teams/%s" % group.id)
+                    return HttpResponseRedirect("/teams/%s" % team.id)
                 
-            return HttpResponseRedirect("/teams/%s" % group.id)
+            return HttpResponseRedirect("/teams/%s" % team.id)
 
 
 # for key, value in request.POST.items():

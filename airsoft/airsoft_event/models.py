@@ -7,14 +7,14 @@ from django.urls import reverse
 
 
 class Event(models.Model):
-    name = models.CharField(max_length=128, blank=False, null=False)
+    name = models.CharField(max_length=128, blank=False, null=False, unique=True)
     owner = models.ForeignKey("airsoft_organization.Organization",
                               on_delete=models.PROTECT,
                               related_name="event_owner"
                               )
-    polygon = models.ForeignKey("airsoft_polygon.Polygon", on_delete=models.PROTECT, blank=True,null=True)
+    polygon = models.ForeignKey("airsoft_polygon.Polygon", on_delete=models.PROTECT, blank=True, null=True)
     Description = models.TextField(blank=True, null=True)
-    banner = models.ImageField(upload_to='event_banner', blank=True)
+    banner = models.ImageField(upload_to='event_banner', blank=True, default='nopic.jpeg')
     arrival_date = models.DateField()
     start_date = models.DateField()
     end_date = models.DateField()
@@ -37,8 +37,8 @@ class Event(models.Model):
 class Sides(models.Model):
     name = models.CharField(max_length=128)
     hidden_scenario = models.BooleanField(default=False)
-    scenario = models.ForeignKey("airsoft_event.Scenario", on_delete=models.CASCADE, blank=True,null=True)
+    scenario = models.ForeignKey("airsoft_event.Scenario", on_delete=models.CASCADE, blank=True, null=True)
 
 
 class Scenario(models.Model):
-    pass
+    body = models.TextField()
