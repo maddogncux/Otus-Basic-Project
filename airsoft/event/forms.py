@@ -33,3 +33,5 @@
 # #         model = RegisteredTeams
 # #         fields = ["registration", "players", "side", "addservice"]
 # #         players = forms.ModelChoiceField("members")
+# class EventForms:
+#     pass

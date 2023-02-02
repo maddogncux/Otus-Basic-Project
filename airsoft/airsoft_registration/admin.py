@@ -1,6 +1,6 @@
 from django.contrib import admin
-
+from airsoft_registration.models import TeamRegistration, Player
 # Register your models here.
-from .models import EventVote, TeamRegistration, Player
+
 admin.site.register(TeamRegistration)
 admin.site.register(Player)

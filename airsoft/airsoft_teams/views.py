@@ -23,7 +23,7 @@ class TeamCreate(CreateView):
 
     def form_valid(self, form):
         user = self.request.user
-        user_in_team = Team.objects.filter(members=user)
+        # user_in_team = Team.objects.filter(members=user)
         # if len(user_in_team) == 1:
         #     return HttpResponseRedirect("/teams/create/")
         # else:
@@ -58,12 +58,6 @@ class TeamDetails(DetailView):
         .objects\
         .prefetch_related("team_request", "event_vote", "team_members")\
         .select_related()
-
-
-
-
-
-
     def post(self, request, *args, **kwargs, ):
         if request.method == 'POST':
             print("get post")

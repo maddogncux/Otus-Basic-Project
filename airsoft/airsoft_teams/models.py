@@ -59,10 +59,6 @@ class Team(models.Model):
         self.save()
         return Team
 
-
-
-
-
 class Members(models.Model):
     FRIEND = 1
     MEMBER = 2
@@ -80,9 +76,9 @@ class Members(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(auto_now=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=FRIEND)
-    main = models.BooleanField(default=False)                                                                               # chek if user in many teams
+    main = models.BooleanField(default=False) # chek if user in many teams
     # role = models.ForeignKey("airsoft_teams.Role", on_delete=models.SET_NULL, null=True)
-    # role
+
 
     def __str__(self):
         return self.user.username

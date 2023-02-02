@@ -55,14 +55,21 @@ class OrgDetails(DetailView):
     model = Organization
 
     # Move to user manger  (mby use in include templates?)
+    def get_form_kwargs(self):
+        """ Passes the request object to the form class.
+         This is necessary to only display members that belong to a given team"""
+        kwargs = super(self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def post(self, request, *args, **kwargs, ):
         if request.method == 'POST':
-            group = get_object_or_404(BasicGroup, pk=self.kwargs["pk"])
+            group = get_object_or_404(Organization, pk=self.kwargs["pk"])
             if request.POST.get("add_requsete"):
-                BasicGroup.add_request(group, user=self.request.user)
+                Organization.add_request(group, user=self.request.user)
                 return HttpResponseRedirect("/teams/%s" % group.id)
             else:
-                member = get_object_or_404(UserModel, pk=value)
+                member = get_object_or_404(UserModel, pk=self.kwargs["value"])
                 if request.POST.get("add"):
                     BasicGroup.add_member(group,  member)
                     return HttpResponseRedirect("/teams/%s" % group.id)

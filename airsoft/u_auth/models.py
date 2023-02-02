@@ -16,12 +16,12 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=32, null=True) # to citys
     country = models.CharField(max_length=32, null=True) # to country
     gear = models.CharField(max_length=32, null=True) # m2m to gear cat
-    weapons = models.CharField(max_length=32, null=True) # m2m to car aegs(gear)
+    weapons = models.CharField(max_length=32, null=True) # m2m to  aeg's(gear)
     car = models.CharField(max_length=32, null=True) # m2m to car
     bbs = models.CharField(max_length=32, null=True) # m2m to bbs(gear)
     birthday = models.DateField(null=True)
     friend_list = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="friend")
-
+    # subs = models.ManyToManyField()
 
 
 

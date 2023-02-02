@@ -10,16 +10,16 @@ from django.views.generic import (ListView,
                                   )
 
 from teams.models import Teams
-from .forms import EventForms
-from .forms import EventPostForms
-from .models import (Event,
-                     EventTags,
-                     EventPost,
-                     AdditionalServices,
-                     Sides,
-                     RegisteredTeams,
-                     EventReg,
-                     )
+# from event.forms import EventForms, EventPostForms
+
+# from event.models import (Event,
+#                      EventTags,
+#                      EventPost,
+#                      AdditionalServices,
+#                      Sides,
+#                      RegisteredTeams,
+#                      EventReg,
+#                      )
 
 
 class EventCreateView(LoginRequiredMixin, CreateView):

@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 
@@ -32,7 +32,7 @@ class Teams(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        super(Teams, self).save(*args, **kwargs)
+        super(self).save(*args, **kwargs)
 
 
 
@@ -53,7 +53,8 @@ class Teams(models.Model):
 
 
 # class Members(models.Model):
-#     team = models.ForeignKey(Teams, on_delete=models.CASCADE, related_name="member_list", null=True, blank=True)
+#     team = models.ForeignKey(Teams, on_delete=models.CASCADE,
+#     related_name="member_list", null=True, blank=True)
 #     user = models.OneToOneField(UserModel, on_delete=models.CASCADE, related_name="member")
 #     # all info airsoft info
 #     # gear = models.ForeignKey(Gear)
@@ -72,12 +73,16 @@ class Teams(models.Model):
 
 
 class MemberRequests(models.Model):
-    team = models.ForeignKey(Teams, on_delete=models.CASCADE, related_name="request_list", blank=False)
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name="requests_by_user", blank=False)
+    team = models.ForeignKey(Teams, on_delete=models.CASCADE,
+                             related_name="request_list",
+                             blank=False)
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE,
+                             related_name="requests_by_user",
+                             blank=False)
     request_text = models.TextField(blank=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user
 
 
 
@@ -119,7 +124,7 @@ class MemberRequests(models.Model):
 #     name = models.CharField(max_length=1024, null=False)
 #     short_name = models.CharField(max_length=4, null=True)
 #     players = models.ManyToManyField("Player", null=True)
-#     # TODO: easy_thumbnail/ImageField
+
 #     logo = fields.ThumbnailerImageField(resize_source=dict(size=(200, 200), sharpen=True))
 #     organisation = models.ForeignKey("Organisation", on_delete=models.CASCADE, null=True)
 #     socialmedia = models.ManyToManyField("SocialMedia", null=True)

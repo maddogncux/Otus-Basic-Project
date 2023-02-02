@@ -1,7 +1,7 @@
 from django.contrib import admin
-
 from typing import TYPE_CHECKING
-from .models import UserProfile
+from u_auth.models import UserProfile
+
 # Register your models here.
 
 if TYPE_CHECKING:
@@ -9,4 +9,4 @@ if TYPE_CHECKING:
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = "pk", "user",
+    list_display = "pk", "user"

@@ -8,7 +8,7 @@ teams
 {% block body %}
 <p>team :</p>
 
-{{user.team_profile.role}}
+{{user.get_role_display}}
 
 <li class="list-group-item">name - {{team.name}}</li>
 <li class="list-group-item">city - {{team.city}}</li>
@@ -21,15 +21,6 @@ teams
 <img src={{team.chevron.url }}>
 
 {% if user  in team.members.all %}
-
-{%else%}
-<form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> request </button></form>
-{%endif%}
-
-
-
-
-
 <p><li class="list-group-item">user request</li></p>
 <form method="post"> {% csrf_token %}
 {%for request in team.team_request.all %}
@@ -57,10 +48,10 @@ teams
 <p><li class="list-group-item">Event list</li></p>
 <form method="post"> {% csrf_token %}
 
-    <button class="btn btn-outline-secondary btn-sm" name="reg_on_vote" value="{{vote.id}}"  type="submit">
-        reg_based_on_vote</button>
-    <button class="btn btn-outline-secondary btn-sm" name="remove_vote" value="{{vote.id}}"  type="submit">
-        remove_vote</button>
+<!--    <button class="btn btn-outline-secondary btn-sm" name="reg_on_vote" value="{{vote.id}}"  type="submit">-->
+<!--        reg_based_on_vote</button>-->
+<!--    <button class="btn btn-outline-secondary btn-sm" name="remove_vote" value="{{vote.id}}"  type="submit">-->
+<!--        remove_vote</button>-->
 
     {%for vote in team.event_vote.all %}
 <li class="list-group-item">do we go to - {{ vote.event }}? </li>
@@ -77,6 +68,21 @@ teams
         </button>
 </form>
 {%endfor%}
+{%else%}
+
+
+
+    {% if user.is_authenticated %}
+       {%for request in team.team_request.all %}
+            {% if user.name == request.name %}
+               <li class="list-group-item">request send</li>
+                {%else%}
+                <form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> request </button></form>
+                {%endif%}
+
+       {%endfor%}
+        <form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> request </button></form>
+    {% endif %}
 
 
 
@@ -84,4 +90,6 @@ teams
 
 
 
+
+{% endif %}
 {% endblock %}

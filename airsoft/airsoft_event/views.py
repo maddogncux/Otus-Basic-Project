@@ -1,12 +1,11 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-
+from django.shortcuts import get_object_or_404
 # Create your views here.
 from django.views.generic import CreateView, ListView, DetailView
 
 from airsoft_organization.models import Organization, Member
 from airsoft_registration.models import EventVote
-from airsoft_teams.models import Team
+from airsoft_teams.models import Team, Members
 from .forms import EventCreateForm
 from .models import Event
 
@@ -26,6 +25,7 @@ class EventCreateViews(CreateView):
             return HttpResponseRedirect("/events/%s" % obj.id)
         else:
             return HttpResponseRedirect("/organization/%s" % self.kwargs["pk"])
+
 
 class EventListVies(ListView):
     paginate_by = 14
@@ -49,8 +49,8 @@ class EventDetails(DetailView):
             print(self.args)
             event = get_object_or_404(Event, pk=self.kwargs["pk"])
             if request.POST.get("vote"):
-                team = get_object_or_404(Team, members=self.request.user) #not good idea
-                EventVote.objects.get_or_create(event=event, team=team)
+                obj = get_object_or_404(Members, user=self.request.user, main=True)
+                EventVote.objects.get_or_create(event=event, team=obj.team)
 
                 return HttpResponseRedirect("/events/%s" % event.id)
         print(str(event))
