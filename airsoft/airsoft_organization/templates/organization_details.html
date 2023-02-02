@@ -16,26 +16,28 @@ Organization
 <li class="list-group-item">id - {{org.edited_at}}</li>
 <li class="list-group-item">id - {{org.is_private}}</li>
 {{team.user_group.members}}
-{% if user == org.owner or user in team.membership.members.all%}
-{%else%}
 
 
-<form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> Create </button></form>
-
-{%endif%}
 
 
-{% if user == team.owner or user  in team.user_group.members.all%}
+
+
+
+
+
+
+
+
 
 <p><li class="list-group-item">user request</li></p>
 <form method="post"> {% csrf_token %}
-{%for user in org.membership.request_user.all %}
-<li class="list-group-item">{{ user }}  {{ user.id }}</li>
+{%for request in org.org_request.all %}
+<li class="list-group-item">{{ request }}  {{ request.id }}</li>
 
-    <button class="btn  btn-outline-secondary btn-sm" name="add" value="{{user.id}}"  type="submit">
+    <button class="btn  btn-outline-secondary btn-sm" name="add" value="{{request.id}}"  type="submit">
         add </button>
 
-    <button class="btn btn-outline-secondary btn-sm" name="refuse" value="{{user.id}}"  type="submit">
+    <button class="btn btn-outline-secondary btn-sm" name="refuse" value="{{request.id}}"  type="submit">
         refuse </button>
 </form>
 {%endfor%}
@@ -51,10 +53,12 @@ Organization
 </form>
 {%endfor%}
 
-{%else%}
-{%endif%}
+
+
 <a href="{% url 'airsoft_organization:create_event' org.pk  %}" class="btn btn-outline-secondary btn-sm">Create event</a>
-{% endblock %}
+<form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> request </button></form>
+
+    {% endblock %}
 
 
 

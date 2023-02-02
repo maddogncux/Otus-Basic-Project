@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, CreateView, DetailView
 
 
-from airsoft_organization.models import Organization, Member
+from airsoft_organization.models import Organization, Member, OrgRequest
 
 # Create your views here.
 
@@ -33,8 +33,8 @@ class OrgCreate(CreateView):
         obj.save()
         obj.members.add(user)
         form.save_m2m()
-        change_role = get_object_or_404(Member, user=user, team=obj)
-        Member.set_owner(change_role)
+        org_member = get_object_or_404(Member, user=user, team=obj)
+        Member.set_owner(org_member)
         return HttpResponseRedirect("/organization/%s" % obj.id)
 
 
@@ -52,33 +52,33 @@ class OrgListView(ListView):
 class OrgDetails(DetailView):
     template_name = 'organization_details.html'
     context_object_name = "org"
-    model = Organization
-
+    # model = Organization
+    queryset = Organization\
+        .objects\
+        .prefetch_related("org_request")\
+        .select_related()
     # Move to user manger  (mby use in include templates?)
     def get_form_kwargs(self):
-        """ Passes the request object to the form class.
-         This is necessary to only display members that belong to a given team"""
         kwargs = super(self).get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
 
     def post(self, request, *args, **kwargs, ):
         if request.method == 'POST':
+            for key, value in request.POST.items():
+                print("check keys")
+                print('Key: %s' % (key))
+                print('Value %s' % (value))
             group = get_object_or_404(Organization, pk=self.kwargs["pk"])
-            if request.POST.get("add_requsete"):
-                Organization.add_request(group, user=self.request.user)
-                return HttpResponseRedirect("/teams/%s" % group.id)
-            else:
-                member = get_object_or_404(UserModel, pk=self.kwargs["value"])
-                if request.POST.get("add"):
-                    BasicGroup.add_member(group,  member)
-                    return HttpResponseRedirect("/teams/%s" % group.id)
+            if request.POST.get("add_request"):
+                group.send_request(user=self.request.user)
+                return HttpResponseRedirect("/organization/%s" % group.id)
+            if request.POST.get("add"):
 
-                if request.POST.get("kick"):
-                    BasicGroup.kick_member(group, member)
-                    return HttpResponseRedirect("/teams/%s" % group.id)
+                group.add_member(org_request=get_object_or_404(OrgRequest, pk=value))
+                return HttpResponseRedirect("/organization/%s" % group.id)
+            if request.POST.get("refuse"):
+                group.refuse_request(org_request=get_object_or_404(OrgRequest, pk=value))
 
-                if request.POST.get("refuse"):
-                    BasicGroup.refuse_request(group, member)
-                    return HttpResponseRedirect("/teams/%s" % group.id)
-        return HttpResponseRedirect("/teams/%s" % group.id)
+
+        return HttpResponseRedirect("/organization/%s" % group.id)

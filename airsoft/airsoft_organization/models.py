@@ -57,16 +57,16 @@ class Organization(models.Model):
         else:
             return False
 
-    def add_member(self, team_request):
-        if team_request.user not in self.members.all():
-            self.members.add(team_request.user)
+    def add_member(self, org_request):
+        if org_request.user not in self.members.all():
+            self.members.add(org_request.user)
             self.save()
-            team_request.delete()
+            org_request.delete()
             return Organization
 
     @staticmethod
-    def refuse_request(team_request):
-        team_request.delete()
+    def refuse_request(org_request):
+        org_request.delete()
         return Organization
 
     def kick_member(self, user):
@@ -74,7 +74,7 @@ class Organization(models.Model):
         self.save()
         return Organization
 
-
+# edit roles for org
 class Member(models.Model):
     FRIEND = 1
     MEMBER = 2

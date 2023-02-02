@@ -56,7 +56,10 @@ class TeamDetails(DetailView):
     template_name = 'team_member_details.html'
     queryset = Team\
         .objects\
-        .prefetch_related("team_request", "event_vote", "team_members")\
+        .prefetch_related("team_request",
+                          "event_vote",
+                          "team_members",
+                          "team_registration")\
         .select_related()
     def post(self, request, *args, **kwargs, ):
         if request.method == 'POST':
@@ -72,54 +75,31 @@ class TeamDetails(DetailView):
                 Team.send_request(team, user=self.request.user)
                 return HttpResponseRedirect("/teams/%s" % team.id)
             else:
-                # if request.POST.get("add"):
-                #     user = get_object_or_404(UserModel, pk=value)
-                #     print("add")
-                #     Team.add_member(team, user)
-                #     return HttpResponseRedirect("/teams/%s" % team.id)
                 if request.POST.get("add"):
-                    team_request = get_object_or_404(TeamRequest, pk=value)
-                    print("add")
-                    Team.add_member(team_request.team, team_request)
+                    team.add_member(team_request=get_object_or_404(TeamRequest, pk=value))
                     return HttpResponseRedirect("/teams/%s" % team.id)
 
                 if request.POST.get("kick"):
-                    user = get_object_or_404(UserModel, pk=value)
-                    print("kick")
-                    Team.kick_member(team, user)
+                    team.kick_member(user=get_object_or_404(UserModel, pk=value))
                     return HttpResponseRedirect("/teams/%s" % team.id)
 
                 if request.POST.get("refuse"):
                     teamreq = get_object_or_404(TeamRequest, pk=value)
                     teamreq.delete()
                     print("refuse")
-                    # Team.refuse_request(team, user)
                     return HttpResponseRedirect("/teams/%s" % team.id)
 
                 if request.POST.get("yes"):
                     print("yes")
                     vote = get_object_or_404(EventVote, pk=value)
-                    print(vote)
-                    user = self.request.user
-                    print(user)
-                    EventVote.i_go(vote, user)
+                    vote.i_go(self.request.user)
                     return HttpResponseRedirect("/teams/%s" % team.id)
 
                 if request.POST.get("no"):
-                    print("no")
                     vote = get_object_or_404(EventVote, pk=value)
-                    print(vote)
-                    user = self.request.user
-                    print(user)
-                    EventVote.not_go(vote, user)
+                    vote.not_go(self.request.user)
                     return HttpResponseRedirect("/teams/%s" % team.id)
 
-                if request.POST.get("vote_reg"):
-                    print("vote_reg")
-                    vote = get_object_or_404(EventVote, pk=value)
-                    EventVote.vote_registration(vote, side)
-                    return HttpResponseRedirect("/teams/%s" % team.id)
-                
             return HttpResponseRedirect("/teams/%s" % team.id)
 
 

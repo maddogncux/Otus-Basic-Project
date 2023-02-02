@@ -9,7 +9,7 @@ from airsoft_event.models import Event
 from airsoft_teams.models import Members
 from airsoft_teams.models import Team
 from .forms import TeamRegForm
-from .models import TeamRegistration
+from .models import TeamRegistration, EventVote
 
 
 class TeamRegistrationView(CreateView):
@@ -32,4 +32,23 @@ class TeamRegistrationView(CreateView):
         obj.team = member.team
         obj.event = get_object_or_404(Event, pk=self.kwargs["pk"])
         obj.save()
+        return HttpResponseRedirect("/events/%s" % obj.event.id)
+
+class TeamVoteRegistrationView(CreateView):
+    model = TeamRegistration
+    template_name = "registration.html"
+    # form_class = TeamRegForm
+    fields = ["side"]
+
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        member = get_object_or_404(Members, user=self.request.user, main=True)
+        obj.team = member.team
+        obj.event = get_object_or_404(Event, pk=self.kwargs["pk"])
+        vote = get_object_or_404(EventVote, event=obj.event, team=member.team)
+        obj.save()
+        obj.players.add(*vote.yes.all())
+        form.save_m2m()
+        vote.delete()
         return HttpResponseRedirect("/events/%s" % obj.event.id)

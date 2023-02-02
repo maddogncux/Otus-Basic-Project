@@ -34,7 +34,10 @@ Organization
 
 
 registration
+{% for teams in event.registered_teams.all%}
 
+<li class="list-group-item"> team - {{ teams }} {{ teams.side }}</li>
+{% endfor %}
 
 {% endblock %}
 

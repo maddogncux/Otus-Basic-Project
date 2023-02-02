@@ -38,8 +38,7 @@ class EventListVies(ListView):
 class EventDetails(DetailView):
     context_object_name = "event"
     template_name = 'event_details.html'
-    model = Event
-
+    queryset = Event.objects.prefetch_related("registered_teams")
     def post(self, request, *args, **kwargs, ):
         if request.method == 'POST':
             for key, value in request.POST.items():

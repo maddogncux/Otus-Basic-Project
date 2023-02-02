@@ -125,7 +125,7 @@ class AddMember(PermissionRequiredMixin, UpdateView):
 class LeaveTeam(UpdateView, LoginRequiredMixin):
     model = Teams
     form_class = TeamsForm
-    #work without get_object
+    # work without get_object
     def get_object(self, queryset=None):
         return Teams.objects.get(slug=self.kwargs['slug'])
 

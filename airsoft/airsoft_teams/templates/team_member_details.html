@@ -67,8 +67,22 @@ teams
         No:{{vote.no.count}}
         </button>
 </form>
+    {%endfor%}
+
+<p><li class="list-group-item">team_registratio</li></p>
+{%for reg in team.team_registration.all %}
+<li class="list-group-item">Event - {{ reg.event }} </li>
+    {%for user  in reg.players.all %}
+
+    <li class="list-group-item"> {{user}} </li>
+    {%endfor%}
 {%endfor%}
-{%else%}
+</form>
+
+
+
+
+    {%else%}
 
 
 

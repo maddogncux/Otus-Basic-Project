@@ -16,7 +16,7 @@ UserModel: AbstractUser = get_user_model()
 
 
 class TeamRegistration(models.Model):
-    event = models.ForeignKey("airsoft_event.Event", on_delete=models.CASCADE)
+    event = models.ForeignKey("airsoft_event.Event", on_delete=models.CASCADE, related_name="registered_teams")
     side = models.ForeignKey("airsoft_event.Sides", on_delete=models.PROTECT)
     team = models.ForeignKey("airsoft_teams.Team", related_name="team_registration", on_delete=models.CASCADE)
     players = models.ManyToManyField(UserModel, through="airsoft_registration.Player", related_name="regd_players")
@@ -42,6 +42,10 @@ class TeamRegistration(models.Model):
         self.save()
         return self
 
+    def __str__(self):
+        return self.team.name
+    # def __str__(self):
+    #     return self.event
 
 class Player(models.Model):
     team = models.ForeignKey("airsoft_registration.TeamRegistration", on_delete=models.CASCADE)
