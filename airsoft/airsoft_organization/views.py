@@ -65,20 +65,29 @@ class OrgDetails(DetailView):
 
     def post(self, request, *args, **kwargs, ):
         if request.method == 'POST':
-            for key, value in request.POST.items():
-                print("check keys")
-                print('Key: %s' % (key))
-                print('Value %s' % (value))
             group = get_object_or_404(Organization, pk=self.kwargs["pk"])
-            if request.POST.get("add_request"):
-                group.send_request(user=self.request.user)
-                return HttpResponseRedirect("/organization/%s" % group.id)
-            if request.POST.get("add"):
-
-                group.add_member(org_request=get_object_or_404(OrgRequest, pk=value))
-                return HttpResponseRedirect("/organization/%s" % group.id)
-            if request.POST.get("refuse"):
-                group.refuse_request(org_request=get_object_or_404(OrgRequest, pk=value))
-
-
+            group.request_handler(request=request, user=self.request.user)
+            return HttpResponseRedirect("/organization/%s" % group.id)
         return HttpResponseRedirect("/organization/%s" % group.id)
+
+    # def post(self, request, *args, **kwargs, ):
+    #     if request.method == 'POST':
+    #         for key, value in request.POST.items():
+    #             print(request.POST.items())
+    #             print("check keys")
+    #             print('Key: %s' % (key))
+    #             print('Value %s' % (value))
+    #         group = get_object_or_404(Organization, pk=self.kwargs["pk"])
+    #         if request.POST.get("add_request"):
+    #             group.send_request(user=self.request.user)
+    #             return HttpResponseRedirect("/organization/%s" % group.id)
+    #         if request.POST.get("add"):
+    #
+    #             group.add_member(org_request=get_object_or_404(OrgRequest, pk=value))
+    #             return HttpResponseRedirect("/organization/%s" % group.id)
+    #         if request.POST.get("refuse"):
+    #             group.refuse_request(org_request=get_object_or_404(OrgRequest, pk=value))
+    #
+    #
+    #     return HttpResponseRedirect("/organization/%s" % group.id)
+

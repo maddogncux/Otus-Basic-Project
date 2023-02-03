@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.shortcuts import get_object_or_404
 # Create your models here.
 from django.urls import reverse
 
@@ -31,6 +32,28 @@ class Organization(models.Model):
         return reverse("/organization/%s" % self.pk)
 
 
+    def request_handler(self, request, user):
+        for key, value in request.POST.items():
+            print(request.POST.items())
+            print("check keys")
+            print('Key: %s' % (key))
+            print('Value %s' % (value))
+        if key == "add_request":
+            self.send_request(user=user)
+            return self
+        if key == "add":
+            self.add_member(org_request=get_object_or_404(OrgRequest, pk=value))
+            return self
+        if key == "refuse":
+            self.refuse_request(org_request=get_object_or_404(OrgRequest, pk=value))
+            return self
+        if key == "kick" :
+            self.kick_member(user=get_object_or_404(UserModel, pk=value))
+            return self
+
+
+
+
 
     def can_create_event(self, member):
         print("user role =", member.role)
@@ -39,9 +62,9 @@ class Organization(models.Model):
         else:
             return False
 
-    def self_org(self, user):
-        if user == self.owner:
-            return self.objects
+    # def self_org(self, user):
+    #     if user == self.owner:
+    #         return self.objects
 
     def get_absolute_url(self):
         return reverse("/teams/%s" % self.pk)
@@ -51,7 +74,7 @@ class Organization(models.Model):
             OrgRequest.objects.get_or_create(team=self, user=user)
             return Organization
 
-    def user_in_team(self, user):
+    def user_in_org(self, user):
         if user in self.members.all():
             return True
         else:
@@ -61,18 +84,18 @@ class Organization(models.Model):
         if org_request.user not in self.members.all():
             self.members.add(org_request.user)
             self.save()
-            org_request.delete()
-            return Organization
+            org_request.self_delete()
+            return self
 
     @staticmethod
     def refuse_request(org_request):
-        org_request.delete()
+        org_request.self_delete()
         return Organization
 
     def kick_member(self, user):
         self.members.remove(user)
         self.save()
-        return Organization
+        return self
 
 # edit roles for org
 class Member(models.Model):
@@ -115,3 +138,6 @@ class OrgRequest(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def self_delete(self):
+        self.delete()

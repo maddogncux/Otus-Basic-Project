@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
-
+from airsoft_registration.models import EventVote
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 # Create your models here.
@@ -31,6 +32,35 @@ class Team(models.Model):
     def get_absolute_url(self):
         return reverse("/teams/%s" % self.pk)
 
+    def request_handler(self, request, user):
+        for key, value in request.POST.items():
+            print(request.POST.items())
+            print("check keys")
+            print('Key: %s' % (key))
+            print('Value %s' % (value))
+        if key == "add_request":
+            self.send_request(user=user)
+            return self
+        if key == "add":
+            self.add_member(team_request=get_object_or_404(TeamRequest, pk=value))
+            return self
+        if key == "refuse":
+            self.refuse_request(team_request=get_object_or_404(TeamRequest, pk=value))
+            return self
+        if key == "kick":
+            self.kick_member(user=get_object_or_404(UserModel, pk=value))
+            return self
+        if key == "yes":
+            vote = get_object_or_404(EventVote, pk=value)
+            vote.i_go(user)
+            return self
+        if key == "no":
+            vote = get_object_or_404(EventVote, pk=value)
+            vote.not_go(user)
+            return self
+        if key == "promoute":
+            pass
+
     def send_request(self, user):
         if user not in self.members.all():
             TeamRequest.objects.get_or_create(team=self, user=user)
@@ -46,12 +76,12 @@ class Team(models.Model):
         if team_request.user not in self.members.all():
             self.members.add(team_request.user)
             self.save()
-            team_request.delete()
+            team_request.self_delete
             return Team
 
     @staticmethod
     def refuse_request(team_request):
-        team_request.delete()
+        team_request.self_delete()
         return Team
 
     def kick_member(self, user):
@@ -103,6 +133,5 @@ class TeamRequest(models.Model):
     def __str__(self):
         return self.user.username
 
-    # def refuse_request(self):
-    #     self.delete()
-    #     return Team
+    def self_delete(self):
+        self.delete()

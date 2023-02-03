@@ -61,46 +61,65 @@ class TeamDetails(DetailView):
                           "team_members",
                           "team_registration")\
         .select_related()
+
+
+    def get_form_kwargs(self):
+        kwargs = super(self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
+
     def post(self, request, *args, **kwargs, ):
         if request.method == 'POST':
-            print("get post")
-            for key, value in request.POST.items():
-                print("check keys")
-                print('Key: %s' % (key))
-                print('Value %s' % (value))
             team = get_object_or_404(Team, pk=self.kwargs["pk"])
-            print("get group")
-            if request.POST.get("add_request"):
-                print("add_request")
-                Team.send_request(team, user=self.request.user)
-                return HttpResponseRedirect("/teams/%s" % team.id)
-            else:
-                if request.POST.get("add"):
-                    team.add_member(team_request=get_object_or_404(TeamRequest, pk=value))
-                    return HttpResponseRedirect("/teams/%s" % team.id)
-
-                if request.POST.get("kick"):
-                    team.kick_member(user=get_object_or_404(UserModel, pk=value))
-                    return HttpResponseRedirect("/teams/%s" % team.id)
-
-                if request.POST.get("refuse"):
-                    teamreq = get_object_or_404(TeamRequest, pk=value)
-                    teamreq.delete()
-                    print("refuse")
-                    return HttpResponseRedirect("/teams/%s" % team.id)
-
-                if request.POST.get("yes"):
-                    print("yes")
-                    vote = get_object_or_404(EventVote, pk=value)
-                    vote.i_go(self.request.user)
-                    return HttpResponseRedirect("/teams/%s" % team.id)
-
-                if request.POST.get("no"):
-                    vote = get_object_or_404(EventVote, pk=value)
-                    vote.not_go(self.request.user)
-                    return HttpResponseRedirect("/teams/%s" % team.id)
-
+            team.request_handler(request=request, user=self.request.user)
             return HttpResponseRedirect("/teams/%s" % team.id)
+        return HttpResponseRedirect("/teams/%s" % team.id)
+
+
+
+
+
+    # def post(self, request, *args, **kwargs, ):
+    #     if request.method == 'POST':
+    #         print("get post")
+    #         for key, value in request.POST.items():
+    #             print("check keys")
+    #             print('Key: %s' % (key))
+    #             print('Value %s' % (value))
+    #         team = get_object_or_404(Team, pk=self.kwargs["pk"])
+    #         print("get group")
+    #         if request.POST.get("add_request"):
+    #             print("add_request")
+    #             Team.send_request(team, user=self.request.user)
+    #             return HttpResponseRedirect("/teams/%s" % team.id)
+    #         else:
+    #             if request.POST.get("add"):
+    #                 team.add_member(team_request=get_object_or_404(TeamRequest, pk=value))
+    #                 return HttpResponseRedirect("/teams/%s" % team.id)
+    #
+    #             if request.POST.get("kick"):
+    #                 team.kick_member(user=get_object_or_404(UserModel, pk=value))
+    #                 return HttpResponseRedirect("/teams/%s" % team.id)
+    #
+    #             if request.POST.get("refuse"):
+    #                 teamreq = get_object_or_404(TeamRequest, pk=value)
+    #                 teamreq.delete()
+    #                 print("refuse")
+    #                 return HttpResponseRedirect("/teams/%s" % team.id)
+    #
+    #             if request.POST.get("yes"):
+    #                 print("yes")
+    #                 vote = get_object_or_404(EventVote, pk=value)
+    #                 vote.i_go(self.request.user)
+    #                 return HttpResponseRedirect("/teams/%s" % team.id)
+    #
+    #             if request.POST.get("no"):
+    #                 vote = get_object_or_404(EventVote, pk=value)
+    #                 vote.not_go(self.request.user)
+    #                 return HttpResponseRedirect("/teams/%s" % team.id)
+    #
+    #         return HttpResponseRedirect("/teams/%s" % team.id)
 
 
 # for key, value in request.POST.items():
