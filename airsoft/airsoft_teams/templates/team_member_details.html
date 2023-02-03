@@ -40,9 +40,15 @@ teams
 {%for member in team.team_members.all %}
 <li class="list-group-item">user -{{ member.user }} id - {{ member.user.id }} created_at -{{member.created_at}} edited -{{member.edited_at}}role - {{member.get_role_display}}</li>
     <form method="post"> {% csrf_token %}
-    <button class="btn btn-outline-secondary btn-sm" name="kick" value="{{member.user.id}}"  type="submit">
-        kick </button>
-</form>
+    <button class="btn btn-outline-secondary btn-sm" name="kick" value="{{member.user.id}}"  type="submit">kick </button>
+
+
+
+        <button class="btn btn-outline-secondary btn-sm" name="promote" value="{{member.id}}"   type="submit">
+        promote </button>
+        <button class="btn btn-outline-secondary btn-sm" name="depromote" value="{{member.id}}"   type="submit">
+        depromote </button>
+    </form>
 {%endfor%}
 
 <p><li class="list-group-item">Event list</li></p>

@@ -35,9 +35,10 @@ class Team(models.Model):
     def request_handler(self, request, user):
         for key, value in request.POST.items():
             print(request.POST.items())
-            print("check keys")
-            print('Key: %s' % (key))
-            print('Value %s' % (value))
+            # print("check keys")
+            # print('Key: %s' % (key))
+            # print('Value %s' % (value))
+
         if key == "add_request":
             self.send_request(user=user)
             return self
@@ -58,9 +59,15 @@ class Team(models.Model):
             vote = get_object_or_404(EventVote, pk=value)
             vote.not_go(user)
             return self
-        if key == "promoute":
-            pass
-
+        # make role select in future
+        if key == "promote":
+            member = get_object_or_404(Members, pk=value)
+            member.promote()
+            return self
+        if key == "depromote":
+            member = get_object_or_404(Members, pk=value)
+            member.depromote()
+            return self
     def send_request(self, user):
         if user not in self.members.all():
             TeamRequest.objects.get_or_create(team=self, user=user)
@@ -124,7 +131,16 @@ class Members(models.Model):
         self.save()
         return Members
 
-
+    def promote(self):
+        if self.role < 4:
+            self.role=self.role + 1
+            self.save()
+            return self
+    def depromote(self):
+        if self.role > 1:
+            self.role = self.role - 1
+            self.save()
+            return self
 class TeamRequest(models.Model):
     team = models.ForeignKey("airsoft_teams.Team", on_delete=models.CASCADE, related_name="team_request")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

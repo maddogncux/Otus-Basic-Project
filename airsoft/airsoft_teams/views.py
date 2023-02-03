@@ -68,7 +68,6 @@ class TeamDetails(DetailView):
         kwargs['request'] = self.request
         return kwargs
 
-
     def post(self, request, *args, **kwargs, ):
         if request.method == 'POST':
             team = get_object_or_404(Team, pk=self.kwargs["pk"])
