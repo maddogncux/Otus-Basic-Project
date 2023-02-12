@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Permission
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.views import (
     LoginView as LoginViewGeneric,
     LogoutView as LogoutViewGeneric,
@@ -38,7 +38,8 @@ class UserCreateView(CreateView):
     def form_valid(self, form):
         return super().form_valid(form)
 
-
+class UserEditProfile(UpdateView):
+    pass
 
 
 

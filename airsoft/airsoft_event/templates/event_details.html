@@ -22,16 +22,15 @@ Organization
 
 
 
+<div>
 <form method="post">
     {% csrf_token %}
     <button class="btn btn-outline-secondary btn-sm" name="vote" value="vote"  type="submit"> vote </button>
 </form>
 
-<form method="post">
-    {% csrf_token %}
-    <a href="{% url 'airsoft_event:team_reg' event.pk %}" class="btn btn-outline-secondary btn-sm">reg</a>
-</form>
+<a href="{% url 'airsoft_event:team_reg' event.pk %}" class="btn btn-outline-secondary btn-sm">reg</a>
 
+</div>
 
 registration
 {% for teams in event.registered_teams.all%}

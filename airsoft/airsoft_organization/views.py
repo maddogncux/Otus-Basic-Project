@@ -33,7 +33,7 @@ class OrgCreate(CreateView):
         obj.save()
         obj.members.add(user)
         form.save_m2m()
-        org_member = get_object_or_404(Member, user=user, team=obj)
+        org_member = get_object_or_404(Member, user=user, org=obj)
         Member.set_owner(org_member)
         return HttpResponseRedirect("/organization/%s" % obj.id)
 
@@ -55,7 +55,7 @@ class OrgDetails(DetailView):
     # model = Organization
     queryset = Organization\
         .objects\
-        .prefetch_related("org_request")\
+        .prefetch_related("org_request", "org_members", "event_owner")\
         .select_related()
     # Move to user manger  (mby use in include templates?)
     def get_form_kwargs(self):
@@ -68,7 +68,13 @@ class OrgDetails(DetailView):
             group = get_object_or_404(Organization, pk=self.kwargs["pk"])
             group.request_handler(request=request, user=self.request.user)
             return HttpResponseRedirect("/organization/%s" % group.id)
-        return HttpResponseRedirect("/organization/%s" % group.id)
+
+
+
+
+
+
+
 
     # def post(self, request, *args, **kwargs, ):
     #     if request.method == 'POST':

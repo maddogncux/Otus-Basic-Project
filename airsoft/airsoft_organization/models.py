@@ -16,7 +16,8 @@ class Organization(models.Model):
     city = models.CharField(max_length=64, blank=True, null=False)
     description = models.TextField()
     logo = models.ImageField(upload_to="org_logo", blank=True, default='nopic.jpeg')
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL, through="airsoft_organization.Member",
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                     through="airsoft_organization.Member",
                                      related_name="org_member")
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(auto_now=True)
@@ -132,7 +133,7 @@ class Member(models.Model):
 
 
 class OrgRequest(models.Model):
-    team = models.ForeignKey("airsoft_organization.Organization", on_delete=models.CASCADE, related_name="org_request")
+    org = models.ForeignKey("airsoft_organization.Organization", on_delete=models.CASCADE, related_name="org_request")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

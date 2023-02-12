@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--team_member-->
+<!--{%for member in team_members%}-->
+
+<!--{{member}} {{member.user.id}} {{member.id}}-->
+<!--{%endfor%}-->
+
+
+
+<p><li class="list-group">Member list</li></p>
+{%for member in team_members%}
+
+<form method="post"> {% csrf_token %}
+    <li class="list-group-item">user -{{ member.user }} member_id - {{member.id}}  user_id - {{ member.user.id }} created_at -{{member.created_at}} edited -{{member.edited_at}}role - {{member.get_role_display}}</li>
+
+
+</form>
+    <form method="post" action="{% url 'airsoft_teams:member_manager' team.id member.id %}" > {% csrf_token %}
+    <button class="btn btn-outline-secondary btn-sm" name="kick" value="{{member.id}}"  type="submit">kick</button>
+
+
+<div class="dropdown">
+  <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    choose role
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <button class="btn btn-outline-secondary btn-sm" name="role" value="1"  type="submit">friend </button>
+      <button class="btn btn-outline-secondary btn-sm" name="role" value="2"  type="submit">member </button>
+      <button class="btn btn-outline-secondary btn-sm" name="role" value="3"  type="submit">manger </button>
+      <button class="btn btn-outline-secondary btn-sm" name="role" value="4"  type="submit">owner</button>
+
+  </ul>
+</form>
+</div>
+{%endfor%}
+
+
+</body>
+</html>

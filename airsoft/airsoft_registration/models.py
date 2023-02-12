@@ -26,6 +26,12 @@ class TeamRegistration(models.Model):
 
     # services = models.ManyToManyField(services,related_name="add_team_services")
 
+    class Meta:
+
+        constraints = [
+            models.UniqueConstraint(fields=['event', 'team'], name='unique registration')
+        ]
+
     def add_player(self, user):
         player = Player.get_or_create(team_reg=self.object, user=user)
         self.players.add(player)
@@ -67,6 +73,21 @@ class EventVote(models.Model):
     yes = models.ManyToManyField(UserModel, related_name="Yes_player", blank=True)
     no = models.ManyToManyField(UserModel, related_name="No_player", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def request_handler(self, request, user):
+        for key, value in request.POST.items():
+            print(request.POST.items())
+            print("check keys")
+            print('Key: %s' % (key))
+            print('Value %s' % (value))
+        if key == "yes":
+            self.i_go(user)
+            return self
+        if key == "no":
+            self.not_go(user)
+            return self
+
+
 
     def i_go(self, user):
         self.yes.add(user)

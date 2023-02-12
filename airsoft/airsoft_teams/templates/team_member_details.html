@@ -1,14 +1,19 @@
 {% extends 'homepage/base.html' %}
 
 
-{% block title %}
-teams
-{% endblock %}
 
 {% block body %}
 <p>team :</p>
-
+{{user.members}}
 {{user.get_role_display}}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 <li class="list-group-item">name - {{team.name}}</li>
 <li class="list-group-item">city - {{team.city}}</li>
@@ -20,7 +25,9 @@ teams
 <li class="list-group-item">is_private - {{team.is_private}}</li>
 <img src={{team.chevron.url }}>
 
-{% if user  in team.members.all %}
+
+
+
 <p><li class="list-group-item">user request</li></p>
 <form method="post"> {% csrf_token %}
 {%for request in team.team_request.all %}
@@ -34,48 +41,18 @@ teams
 </form>
 {%endfor%}
 
+<div>
+{% include "team_members.html" with team_members=team.team_member.all  %}
+</div>
 
-<p><li class="list-group-item">Member list</li></p>
-<form method="post"> {% csrf_token %}
-{%for member in team.team_members.all %}
-<li class="list-group-item">user -{{ member.user }} id - {{ member.user.id }} created_at -{{member.created_at}} edited -{{member.edited_at}}role - {{member.get_role_display}}</li>
-    <form method="post"> {% csrf_token %}
-    <button class="btn btn-outline-secondary btn-sm" name="kick" value="{{member.user.id}}"  type="submit">kick </button>
-
-
-
-        <button class="btn btn-outline-secondary btn-sm" name="promote" value="{{member.id}}"   type="submit">
-        promote </button>
-        <button class="btn btn-outline-secondary btn-sm" name="depromote" value="{{member.id}}"   type="submit">
-        depromote </button>
-    </form>
-{%endfor%}
-
-<p><li class="list-group-item">Event list</li></p>
-<form method="post"> {% csrf_token %}
-
-<!--    <button class="btn btn-outline-secondary btn-sm" name="reg_on_vote" value="{{vote.id}}"  type="submit">-->
-<!--        reg_based_on_vote</button>-->
-<!--    <button class="btn btn-outline-secondary btn-sm" name="remove_vote" value="{{vote.id}}"  type="submit">-->
-<!--        remove_vote</button>-->
-
-    {%for vote in team.event_vote.all %}
-<li class="list-group-item">do we go to - {{ vote.event }}? </li>
+<p><li class="list-group-item">Vote list</li></p>
+<div>
+{% include "vote.html" with votes=team.event_vote.all  %}
+</div>
 
 
-    <form method="post"> {% csrf_token %}
-    <button class="btn btn-outline-secondary btn-sm" name="yes" value="{{vote.id}}"
-            type="submit">Yes:{{vote.yes.count}}
-    </button>
-        <button
-                class="btn btn-outline-secondary btn-sm" name="no" value="{{vote.id}}"
-                type="submit">
-        No:{{vote.no.count}}
-        </button>
-</form>
-    {%endfor%}
 
-<p><li class="list-group-item">team_registratio</li></p>
+<p><li class="list-group">team_registration</li></p>
 {%for reg in team.team_registration.all %}
 <li class="list-group-item">Event - {{ reg.event }} </li>
     {%for user  in reg.players.all %}
@@ -83,12 +60,30 @@ teams
     <li class="list-group-item"> {{user}} </li>
     {%endfor%}
 {%endfor%}
+
+
+
+
+
+<div class="list-group">
+    {%for post in team.team_post.all %}
+       <li class="list-group-item"> {{ post.created_by }} - {{post.body}}</li>
+
+
+
+
+    {%endfor%}</div>
+<div>
+    <form method="post" action="{% url 'airsoft_teams:post_create' team.id %}" >
+    {% csrf_token %}
+    {{ post_form }}
+
+    <input type="hidden" name="team" value="{{team.id}}">
+    <button class="btn btn-outline-secondary btn-sm" type="submit" name="team" value="{{team.id}}" >Creat</button>
+     <a href="{% url 'airsoft_teams:teams' %}" class="btn btn-outline-secondary btn-sm">Back</a>
 </form>
 
 
-
-
-    {%else%}
 
 
 
@@ -110,6 +105,12 @@ teams
 
 
 
+</div>
 
-{% endif %}
+
+
+
+
+
+
 {% endblock %}

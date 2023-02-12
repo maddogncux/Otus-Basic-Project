@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{%for vote in votes%}
+<div>
+</form>
+    <form method="post" action="{% url 'airsoft_registration:vote' vote.id %}" > {% csrf_token %}
+    {%for vote in team.event_vote.all %}
+        <div class="card">
+            <h5 class="card-header">vote</h5>
+                <div class="card-body">
+                    <p class="card-text">do we go to - {{ vote.event }}?</p>
+
+<!--    <li class="list-group-item">user -{{ vote.team }} vote_id - {{vote.id}}  user_id - {{ vote.event }}-->
+
+    <button class="btn btn-outline-secondary btn-sm" name="yes" value="{{vote.id}}"
+            type="submit">Yes:{{vote.yes.count}}</button>
+
+        <button class="btn btn-outline-secondary btn-sm" name="no" value="{{vote.id}}"
+                type="submit">No:{{vote.no.count}}</button>
+
+                    <a href="{% url 'airsoft_event:team_reg_vote' vote.event.pk %}" class="btn btn-outline-secondary btn-sm">reg_by_vote</a>
+
+                    {%endfor%}
+</form>
+</div>
+{%endfor%}
+
+
+
+</body>
+</html>

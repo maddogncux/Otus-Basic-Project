@@ -1,6 +1,6 @@
 import django.urls
 from .views import EventListVies, EventDetails
-from airsoft_registration.views import TeamRegistrationView,TeamVoteRegistrationView
+from airsoft_registration.views import TeamRegistrationView, TeamVoteRegistrationView
 app_name = "airsoft_event"
 urlpatterns = [
     # path("create/", EventCreateViews.as_view(), name="create_event"),

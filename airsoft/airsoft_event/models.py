@@ -35,6 +35,7 @@ class Event(models.Model):
 
 
 class Sides(models.Model):
+
     name = models.CharField(max_length=128)
     hidden_scenario = models.BooleanField(default=False)
     scenario = models.ForeignKey("airsoft_event.Scenario", on_delete=models.CASCADE, blank=True, null=True)

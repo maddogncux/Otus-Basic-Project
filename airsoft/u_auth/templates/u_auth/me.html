@@ -5,17 +5,25 @@
     <title>{{ user.username }}</title>
 </head>
 <body>
-
 name
-{{ user.id }}
-{{ user.member.id}}
-{{ user.member.id}}
-org
-{{ user.has_perm }}
-permision
-{{ User.user_permissions}}
-{%for obj in user.groups.team_owner.all%}
-{{obj}}
+<li>{{user.username}}</li>
+id
+<li>{{ user.id }}</li>
+avatar
+<li>{{ user.avatar}}</li>
+city
+<li>{{ user.city}}</li>
+gear
+<li>{{ user.gear }}</li>
+weapons
+<li>{{ user.weapons }}</li>
+car
+<li>{{ user.car }}</li>
+bbs
+<li>{{ user.bbs }}</li>
+b date
+<li>{{ user.birthday  }}</li>
+
 
 {% endfor %}
 

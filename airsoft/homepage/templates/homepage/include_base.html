@@ -141,109 +141,25 @@
               fill-rule="evenodd"/>
     </symbol>
 </svg>
+{% block title %}
 
 
-<nav class="navbar navbar-dark bg-dark">
-    <a class="d-flex  text-white text-decoration-none" href="/">
-        {%block navbartop%}
-        {% endblock %}
-</nav>
+{% endblock %}
 
 
 
-<main class="d-flex flex-nowrap">
+{% block body %}
+
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
 
 
-    <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 220px;">
+<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 
-        <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none" href="/">
-
-            <!--      <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>-->
-            <span class="fs-4">AirSoftNetwork</span>
-            {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
-    {% endfor %}
-</ul>
-{% endif %}
-        </a>
-        <hr>
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item">
-                <a aria-current="page" class="nav-link active" href="{% url 'homepage:index' %}">
-                    <svg class="bi pe-none me-2" height="16" width="16">
-                        <use xlink:href="#home"/>
-                    </svg>
-                    Home
-                </a>
-            </li>
-            <li>
-                <a class="nav-link  text-white" href="{% url 'airsoft_teams:teams' %}">
-                    <svg class="bi pe-none me-2" height="16" width="16">
-                        <use xlink:href="#people-circle"/>
-                    </svg>
-                    Teams
-                </a>
-            </li>
-            <li>
-                <a class="nav-link text-white" href="{% url 'airsoft_organization:orgs' %}">
-                    <svg class="bi pe-none me-2" height="16" width="16">
-                        <use xlink:href="#collection"/>
-                    </svg>
-                    organizations
-                </a>
-            </li>
-            <li>
-                <a class="nav-link text-white" href="{% url 'airsoft_shops:shops' %}">
-                    <svg class="bi pe-none me-2" height="16" width="16">
-                        <use xlink:href="#toggles2"/>
-                    </svg>
-                    shops
-                </a>
-            </li>
-            <li>
-                <a class="nav-link text-white" href="{% url 'airsoft_event:events' %}">
-                    <svg class="bi pe-none me-2" height="16" width="16">
-                        <use xlink:href="#calendar3"/>
-                    </svg>
-                    Events
-                </a>
-            </li>
-        </ul>
-        <hr>
-        {% if user.is_anonymous %} <a href="{% url 'u_auth:login' %}">Login {% else %}
-        <div class="dropdown">
-            <a aria-expanded="false" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-               data-bs-toggle="dropdown" href="#">
-                <img alt="" class="rounded-circle me-2" height="32" src={{ user.avatar.url }} width="32">
-                <strong>{{user}}<strong>
-
-                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                            <li><a class="dropdown-item" href="#">New project...</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="{% url 'u_auth:logout' %}">Sign out</a></li>
-
-                        </ul>
-      {%endif%}
-        </div>
-    </div>
-     <div class="d-flex" style="height: 920px;">
-    <div class="my-3">
-        <div class="p-3">
-            {% block body %} {% endblock %}
-        </div>
-    </div>
-</main>
-
-
-<!--<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>-->
-
-<!--<script src="sidebars.js"></script>-->
+<script src="sidebars.js"></script>
 </body>
 
 
@@ -263,4 +179,3 @@
 </body>
 
 </html>
-

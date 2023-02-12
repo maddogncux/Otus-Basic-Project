@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # debug_toolbar
+
+    "guardian",
     "debug_toolbar",
     # 'bootstrap',
     # 'fontawesome',
@@ -55,9 +56,7 @@ INSTALLED_APPS = [
     "u_auth.apps.UAuthConfig",
 
     "homepage.apps.HomepageConfig",
-    # "event.apps.EventConfig",
-    # "teams.apps.TeamsConfig",
-    # "org.apps.OrgConfig",
+
 
     # real app
 
@@ -82,6 +81,10 @@ MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+)
 ROOT_URLCONF = "airsoft.urls"
 
 TEMPLATES = [
@@ -95,6 +98,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # CONTEX PROC FOR INCLUDE
+                "airsoft.proc.context"
             ],
         },
     },

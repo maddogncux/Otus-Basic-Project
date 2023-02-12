@@ -21,14 +21,10 @@ class UserProfile(models.Model):
     bbs = models.CharField(max_length=32, null=True) # m2m to bbs(gear)
     birthday = models.DateField(null=True)
     friend_list = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="friend")
+    # team = models.OneToOneField("team)
     # subs = models.ManyToManyField()
-
-
-
-
-
     is_privet = models.BooleanField(default=False)
-
+    team = models.ForeignKey("airsoft_teams.team", on_delete=models.PROTECT, related_name="user_profile", null=True)
     if TYPE_CHECKING:
         objects: models.Manager
 

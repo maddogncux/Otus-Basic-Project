@@ -23,15 +23,14 @@ urlpatterns = [
     path('', include("homepage.urls")),
     path("teams/", include("airsoft_teams.urls")),
 
+    path('registration/', include("airsoft_registration.urls")),
+
     path('organization/', include("airsoft_organization.urls")),
     path('events/', include("airsoft_event.urls")),
     path('shops/', include("airsoft_shops.urls")),
-
     path("admin/", admin.site.urls),
-    # path('events/', include("event.urls")),
     path('auth/', include("u_auth.urls")),
-    # path('teams/', include("teams.urls")),
-    # path('org/', include("org.urls")),
+
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
