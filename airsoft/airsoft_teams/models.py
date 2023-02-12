@@ -152,7 +152,7 @@ class TeamRequest(models.Model):
 
 
 
-
+#lets do this shit
 # vk looks post sys
 class TeamPost(models.Model):
     team = models.ForeignKey("airsoft_teams.Team", on_delete=models.CASCADE,related_name="team_post",blank=False,null=True)
