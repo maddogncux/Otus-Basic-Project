@@ -18,7 +18,7 @@
 <li class="list-group-item">is_private - {{team.is_private}}</li>
 <img src={{ team.chevron.url }}>
 
-
+<form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> request </button></form>
 
 
 

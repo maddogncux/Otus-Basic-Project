@@ -15,9 +15,7 @@
 
 <p><li class="list-group">Member list</li></p>
 {%for member in team_members%}
-
-<form method="post"> {% csrf_token %}
-    <li class="list-group-item">user -{{ member.user }} member_id - {{member.id}}  user_id - {{ member.user.id }} created_at -{{member.created_at}} edited -{{member.edited_at}}role - {{member.get_role_display}}</li>
+<li class="list-group-item">user -{{ member.user }} member_id - {{member.id}}  user_id - {{ member.user.id }} created_at -{{member.created_at}} edited -{{member.edited_at}}role - {{member.get_role_display}}</li>
 
 
 </form>

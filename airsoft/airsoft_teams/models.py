@@ -33,6 +33,7 @@ class Team_Member(models.Model):
         return self.user.username
 
     def request_handler(self, key, value):
+
         if key == "role":
             if 1 <= int(value) <= 4:   # set_owner up change for 3
                 self.set_role(role=value)
@@ -43,10 +44,11 @@ class Team_Member(models.Model):
 
     def set_owner(self):
         self.role = 4
-        self.main = True
         self.save()
         assign_perm('g_view_team', self.user, self.team)
         assign_perm('g_create_team_post', self.user, self.team)
+        assign_perm('g_team_member_manager', self.user, self.team)
+        assign_perm('g_team_vote', self.user, self.team)
         return self
 
     def set_role(self, role):
@@ -54,21 +56,14 @@ class Team_Member(models.Model):
         self.save()
         assign_perm('g_view_team', self.user, self.team)
         assign_perm('g_create_team_post', self.user, self.team)
+        assign_perm('g_team_member_manager', self.user, self.team)
+        assign_perm('g_team_vote', self.user, self.team)
         return self
 
-    def promote(self):
-        if self.role < 4:
-            self.role=self.role + 1
-            self.save()
-            return self
-    def depromote(self):
-        if self.role > 1:
-            self.role = self.role - 1
-            self.save()
-            return self
 
     def kick(self):
         self.delete()
+
 
 
 class Team(models.Model):
@@ -83,19 +78,28 @@ class Team(models.Model):
     edited_at = models.DateTimeField(auto_now=True)
     is_private = models.BooleanField(default=False)
 
+    # post = models.ForeignKey("airsoft_teams.Post", on_delete=models.PROTECT)
+    # team_request = models.ForeignKey("airsoft_teams.TeamRequest", on_delete=models.PROTECT)
+
+
+
     class Meta:
         permissions = (
-            ('g_view_team', 'View_team_guardian'),('g_create_team_post', 'View_team_guardian')
+            ('g_view_team', 'View_team_guardian'),
+            ('g_create_team_post', 'Creat_post_guardian'),
+            ('g_team_member_manager', 'Mamber_manager_guardian'),
+            ('g_team_vote','Team_vote_guardian')
         )
 
-    def request_handler(self, key, value):
-        if key == "role":
-            if 1 <= int(value) <= 4:   # set_owner up change for 3
-                self.set_role(role=value)
-                return self
-        if key == "kick":
-            self.kick()
-            return self
+    # def request_handler(self, request, user):
+    #     for key, value in request.items():
+    #         print(request.POST.items())
+    #         print("i am dumb")
+    #         print(key)
+    #         print(value)
+    #
+    #     if key == "add_request":\
+    #         self.add_request(user)
 
     def __str__(self):
         return self.name
@@ -121,25 +125,22 @@ class TeamRequest(models.Model):
     def __str__(self):
         return self.user.username
 
+    def request_handler(self, key, value):
+        if key =="add":
+            self.add_member()
+        if key == "refuse":
+            self.refuse_request()
+    def add_member(self):
+        Team_Member.objects.create(user=self.user, team=self.team)
+        self.delete()
+        return self
 
-    def add_member(self, team_request):
-        if team_request.user not in self.members.all():
-            self.members.add(team_request.user)
-            self.save()
-            team_request.self_delete()
-            return self
 
-    @staticmethod
-    def refuse_request(team_request):
-        team_request.self_delete()
+    def refuse_request(self):
+        self.self_delete()
         return Team
 
 
-
-    # def request_handler(self, key, value):
-    #     if key == "":
-    #
-    #         return self
     def self_delete(self):
         self.delete()
 

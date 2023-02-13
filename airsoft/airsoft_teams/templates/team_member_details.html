@@ -27,11 +27,13 @@
 
 
 
-
+<div>
 <p><li class="list-group-item">user request</li></p>
-<form method="post"> {% csrf_token %}
-{%for request in team.team_request.all %}
-<li class="list-group-item">name - {{ request }}  userid - {{ request.user.id }}  reqID-{{request.id}}</li>
+
+    {%for request in team.team_request.all %}
+<div>
+<form method="post" action="{% url 'airsoft_teams:request_manager' team.id request.id %}" > {% csrf_token %}
+    <li class="list-group-item">name - {{ request }}  userid - {{ request.user.id }}  reqID-{{request.id}}</li>
 
     <button class="btn  btn-outline-secondary btn-sm" name="add" value="{{request.id}}"  type="submit">
         add </button>
@@ -39,8 +41,9 @@
     <button class="btn btn-outline-secondary btn-sm" name="refuse" value="{{request.id}}"  type="submit">
         refuse </button>
 </form>
-{%endfor%}
-
+</div>
+    {%endfor%}
+</div>
 <div>
 {% include "team_members.html" with team_members=team.team_member.all  %}
 </div>
@@ -82,25 +85,6 @@
     <button class="btn btn-outline-secondary btn-sm" type="submit" name="team" value="{{team.id}}" >Creat</button>
      <a href="{% url 'airsoft_teams:teams' %}" class="btn btn-outline-secondary btn-sm">Back</a>
 </form>
-
-
-
-
-
-    {% if user.is_authenticated %}
-       {%for request in team.team_request.all %}
-            {% if user.name == request.name %}
-               <li class="list-group-item">request send</li>
-                {%else%}
-                <form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> request </button></form>
-                {%endif%}
-
-       {%endfor%}
-        <form method="post"> {% csrf_token %} <button class="btn btn-outline-primary btn-sm" name="add_request" value="add_request" type="submit"> request </button></form>
-    {% endif %}
-
-
-
 
 
 
