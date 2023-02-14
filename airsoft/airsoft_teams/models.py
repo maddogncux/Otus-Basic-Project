@@ -52,12 +52,19 @@ class Team_Member(models.Model):
         return self
 
     def set_role(self, role):
+        """make role groups"""
         self.role = role
         self.save()
-        assign_perm('g_view_team', self.user, self.team)
-        assign_perm('g_create_team_post', self.user, self.team)
-        assign_perm('g_team_member_manager', self.user, self.team)
-        assign_perm('g_team_vote', self.user, self.team)
+
+        if role == 4:
+            print("set role owner")
+        if role == 3:
+            print("set role manager")
+            assign_perm('g_team_member_manager', self.user, self.team)
+        if role == 2:
+            print("set role member")
+        if role == 1:
+            print("set role rec")
         return self
 
 
@@ -132,7 +139,10 @@ class TeamRequest(models.Model):
             self.refuse_request()
     def add_member(self):
         Team_Member.objects.create(user=self.user, team=self.team)
-        self.delete()
+        assign_perm('g_view_team', self.user, self.team)
+        assign_perm('g_create_team_post', self.user, self.team)
+        assign_perm('g_team_vote', self.user, self.team)
+        self.self_delete()
         return self
 
 

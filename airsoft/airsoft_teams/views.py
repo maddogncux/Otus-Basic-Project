@@ -62,8 +62,9 @@ class TeamDetails(DetailView):
 #     model = Team_Member
 
 
-# @permission_required_or_403("airsoft.g_view_team",)
+
 class TeamMemberDetails(PermissionRequiredMixin, DetailView):
+    """make one more view member/manager rename this manager """
     # class TeamMemberDetails(DetailView):
     template_name = 'team_member_details.html'
     permission_required = ['g_view_team']
@@ -90,8 +91,6 @@ class TeamMemberDetails(PermissionRequiredMixin, DetailView):
     #         team.request_handler(request=request, user=self.request.user)
     #         return HttpResponseRedirect("/teams/%s" % team.id)
 
-
-
 class PostCreateView(CreateView):
     template_name = "team_post_create.html"
     form_class = TeamPostForm
@@ -99,8 +98,6 @@ class PostCreateView(CreateView):
     # permission_object = None
     # permission_required = ['g_create_team_post']
     def form_valid(self, form):
-        # team = self.request.user.team_profile.team
-        # print(team)
         user = self.request.user
         if user.has_perm("g_create_team_post", user.team_profile.team):
             obj = form.save(commit=False)
@@ -124,9 +121,6 @@ def member_manager(request, team_pk, member_pk):
             print(value)
         get_object_or_404(Team_Member, pk=member_pk).request_handler(key, value)
     return HttpResponseRedirect("/teams/%s" % team_pk)
-
-
-
 
 
 @permission_required_or_403('g_team_member_manager', (Team, 'pk', 'team_pk'))
