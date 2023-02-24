@@ -69,6 +69,8 @@ class RegistrationTestCase(TestCase):
     url = reverse_lazy("u_auth:register")
 
     def setUp(self) -> None:
+        users = UserModel.objects.all()
+        self.user_before = users.count()
         username = "".join(choices(ascii_lowercase, k=10))
         password = "".join(choices(ascii_letters + digits, k=10))
         user: AbstractUser = UserModel.objects.create_user(
@@ -76,7 +78,7 @@ class RegistrationTestCase(TestCase):
         )
         self.user = user
         self.password = password
-
+        print(users.count())
     def test_Registration(self):
         response = self.client.post(
             self.url,
@@ -90,7 +92,7 @@ class RegistrationTestCase(TestCase):
         )
 
         users = UserModel.objects.all()
-        self.assertEqual(users.count(), 1)
+        self.assertEqual(users.count(), int(self.user_before)+1)
         self.client.login(username=self.user.username, password=self.password)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTrue(response.context["user"].is_anonymous)

@@ -119,6 +119,7 @@ class Team(models.Model):
 
 
     def add_request(self, user):
+        """move to request make view func """
         if user not in self.members.all():
             TeamRequest.objects.get_or_create(team=self, user=user)
             return self
@@ -132,7 +133,7 @@ class TeamRequest(models.Model):
     def __str__(self):
         return self.user.username
 
-    def request_handler(self, key, value):
+    def request_handler(self, key):
         if key =="add":
             self.add_member()
         if key == "refuse":
@@ -143,12 +144,12 @@ class TeamRequest(models.Model):
         assign_perm('g_create_team_post', self.user, self.team)
         assign_perm('g_team_vote', self.user, self.team)
         self.self_delete()
-        return self
+
 
 
     def refuse_request(self):
         self.self_delete()
-        return Team
+
 
 
     def self_delete(self):
@@ -174,14 +175,14 @@ class TeamPost(models.Model):
     # imgs = (for add user pic)
     # avatar_of_user = (link to avatar \for opt and dont qs user each time )
 
-class TeamPostComment(models.Model):
-    post = models.ForeignKey("airsoft_teams.TeamPost", on_delete=models.CASCADE, related_name="team_comment")
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="comment_by_user")
-    created_at = models.DateTimeField(auto_now_add=True)
-    edited_at = models.DateTimeField(auto_now=True)
-    body = models.TextField()
-    # imgs = (for add user pic)
-    # avatar_of_user = (link to avatar \for opt and dont qs user each time )
+# class TeamPostComment(models.Model):
+#     post = models.ForeignKey("airsoft_teams.TeamPost", on_delete=models.CASCADE, related_name="team_comment")
+#     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="comment_by_user")
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     edited_at = models.DateTimeField(auto_now=True)
+#     body = models.TextField()
+#     # imgs = (for add user pic)
+#     # avatar_of_user = (link to avatar \for opt and dont qs user each time )
 
 
 # class Members(models.Model):
