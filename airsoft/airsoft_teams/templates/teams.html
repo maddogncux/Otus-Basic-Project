@@ -38,7 +38,7 @@
       <div class="card-body">
         <h5 class="card-title">{{ team.name }}</h5>
         <p class="card-text">{{ team.description }}</p>
-            {% if user.team_member.team == team %}
+            {% if user.team_profile.team == team %}
           <a class="stretched-link" href="{% url 'airsoft_teams:team' team.pk %}"></a>
             {% else %}
           <a class="stretched-link" href="{% url 'airsoft_teams:team_view' team.pk %}"></a>

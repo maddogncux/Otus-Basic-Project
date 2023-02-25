@@ -39,7 +39,7 @@ class TeamListView(ListView):
     context_object_name = "teams"
     template_name = "teams.html"
     queryset = Team.objects.order_by('-created_at')
-
+    paginate_by = 14
 
 class TeamDetails(DetailView):
     # class TeamDetails(DetailView):
@@ -71,10 +71,17 @@ class TeamMemberDetails(PermissionRequiredMixin, DetailView):
     queryset = Team \
         .objects \
         .prefetch_related("team_request",
+                          "team_request__user",
                           "event_vote",
+                          "event_vote__yes",
+                          "event_vote__no",
                           "team_member",
+
                           "team_registration",
-                          "team_post") \
+
+                          "team_post",
+                          "team_post__created_by",
+                          ) \
         .select_related()
 
     def get_context_data(self, *args, **kwargs):
