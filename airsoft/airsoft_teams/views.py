@@ -62,9 +62,8 @@ class TeamDetails(DetailView):
 #     model = Team_Member
 
 
-
 class TeamMemberDetails(PermissionRequiredMixin, DetailView):
-    """make one more view member/manager rename this manager """
+    """make one more view member/manager rename this to manager """
     # class TeamMemberDetails(DetailView):
     template_name = 'team_member_details.html'
     permission_required = ['g_view_team']

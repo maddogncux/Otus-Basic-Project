@@ -22,6 +22,8 @@ class LoginTestCase(TestCase):
         self.user = user
         self.password = password
 
+    def tearDown(self) -> None:
+        print('test end')
     def test_login(self):
 
         response_a = self.client.post(
@@ -79,6 +81,9 @@ class RegistrationTestCase(TestCase):
         self.user = user
         self.password = password
         print(users.count())
+
+    def tearDown(self) -> None:
+        print('test end')
     def test_Registration(self):
         response = self.client.post(
             self.url,

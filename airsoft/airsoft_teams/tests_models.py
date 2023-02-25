@@ -50,6 +50,7 @@ class Test_Team_Member(TestCase):
         self.assertEqual(self.team_member.role, role)
 
     def test_kick(self):
+        self.assertIn(self.user, self.team.members.all())
         self.team_member.kick()
         self.assertNotIn(self.user, self.team.members.all())
 
