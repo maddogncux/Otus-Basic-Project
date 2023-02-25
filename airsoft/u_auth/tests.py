@@ -4,7 +4,7 @@ from http import HTTPStatus
 from django.contrib.auth.models import AbstractUser
 from django.test import TestCase
 from django.urls import reverse_lazy, reverse
-
+from airsoft_teams.factory import TeamFactory
 from u_auth.models import UserModel
 
 
@@ -13,7 +13,7 @@ class LoginTestCase(TestCase):
     url = reverse_lazy("u_auth:login")
     url1 = reverse_lazy("u_auth:register")
     def setUp(self) -> None:
-
+        # TeamFactory.create()
         username = "".join(choices(ascii_lowercase, k=10))
         password = "".join(choices(ascii_letters + digits, k=10))
         user: AbstractUser = UserModel.objects.create_user(
@@ -23,7 +23,9 @@ class LoginTestCase(TestCase):
         self.password = password
 
     def tearDown(self) -> None:
+        """not needed """
         print('test end')
+
     def test_login(self):
 
         response_a = self.client.post(

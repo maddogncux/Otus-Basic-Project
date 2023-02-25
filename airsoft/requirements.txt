@@ -10,6 +10,7 @@ django-countries==7.4.2
 django-debug-toolbar==3.7.0
 django-guardian==2.4.0
 django-model-utils==4.2.0
+factory-boy==3.2.1
 Faker==17.3.0
 isort==5.11.4
 lazy-object-proxy==1.9.0
