@@ -27,4 +27,6 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python ./airsoft/manage.py test
+        python ./airsoft/manage.py test airsoft
+        python ./airsoft/manage.py test airsoft_teams
+        python ./airsoft/manage.py test u_auth
