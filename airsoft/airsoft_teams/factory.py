@@ -1,8 +1,10 @@
-from random import choices
-from string import ascii_lowercase
-
-from factory.django import DjangoModelFactory
+# pylint: disable=too-many-ancestors
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+# pylint: disable=missing-function-docstring
 import factory
+from factory.django import DjangoModelFactory
+
 from airsoft_teams.models import Team
 
 

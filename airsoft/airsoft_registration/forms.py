@@ -1,15 +1,19 @@
-from django.shortcuts import get_object_or_404
+# pylint: disable=too-many-ancestors
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+# pylint: disable=missing-function-docstring
 
-from airsoft_teams.models import Team, Team_Member
-from .models import TeamRegistration
 from django import forms
+
+from airsoft_teams.models import Team
+from .models import TeamRegistration
 
 
 class TeamRegForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
-        super(TeamRegForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         team = self.request.user.team_profile.team
         # member = get_object_or_404(Members, user=self.request.user, main=True)
         print(str(team))

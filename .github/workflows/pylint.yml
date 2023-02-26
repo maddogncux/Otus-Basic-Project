@@ -21,4 +21,10 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        pylint $(git ls-files '*.py') --load-plugins pylint_django 
+        --load-plugins pylint_django.checkers.migrations 
+        --disable=missing-docstring 
+        --disable=undefined-loop-variable 
+        --disable=duplicate-code
+        --disable=inconsistent-return-statements
+

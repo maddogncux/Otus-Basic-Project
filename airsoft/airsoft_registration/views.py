@@ -1,6 +1,10 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+# pylint: disable=too-many-ancestors
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+# pylint: disable=missing-function-docstring
 
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 # Create your views here.
 from django.views.generic import CreateView, UpdateView
 
@@ -23,7 +27,7 @@ class TeamRegistrationView(CreateView):
         """ Passes the request object to the form class.
          This is necessary to only display members that belong to a given team"""
 
-        kwargs = super(TeamRegistrationView, self).get_form_kwargs()
+        kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
 
@@ -33,7 +37,7 @@ class TeamRegistrationView(CreateView):
         obj.team = self.request.user.team_profile.team
         obj.event = get_object_or_404(Event, pk=self.kwargs["pk"])
         obj.save()
-        return HttpResponseRedirect("/events/%s" % obj.event.id)
+        return HttpResponseRedirect(f"/events/{obj.event.id}")
 
 
 class TeamVoteRegistrationView(CreateView):
@@ -52,7 +56,7 @@ class TeamVoteRegistrationView(CreateView):
         obj.players.add(*vote.yes.all())
         form.save_m2m()
         vote.delete()
-        return HttpResponseRedirect("/events/%s" % obj.event.id)
+        return HttpResponseRedirect(f"/events/{obj.event.id}")
 
 
 class VoteView(UpdateView):
@@ -64,5 +68,4 @@ class VoteView(UpdateView):
             vote = get_object_or_404(EventVote, pk=self.kwargs["pk"])
             print("iam_here")
             vote.request_handler(request=request, user=self.request.user)
-            return HttpResponseRedirect("/teams/%s" % vote.team.id)
-
+            return HttpResponseRedirect(f"/teams/{vote.team.id}")

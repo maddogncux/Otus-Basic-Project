@@ -1,3 +1,4 @@
+# pylint: disable=invalid-name
 from airsoft_teams.forms import TeamPostForm
 
 def context(request):

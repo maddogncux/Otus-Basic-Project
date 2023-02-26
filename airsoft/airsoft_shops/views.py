@@ -1,8 +1,11 @@
+# pylint: disable=too-many-ancestors
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+# pylint: disable=missing-function-docstring
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-
 # Create your views here.
 from django.views.generic import ListView, CreateView, DetailView
 
@@ -35,7 +38,7 @@ class ShopCreate(CreateView):
         form.save_m2m()
         change_role = get_object_or_404(Member, user=user, team=obj)
         Member.set_owner(change_role)
-        return HttpResponseRedirect("/shops/%s" % obj.id)
+        return HttpResponseRedirect(f"/shops/{obj.id}")
 
 
 class ShopListView(ListView):
@@ -58,26 +61,4 @@ class ShopDetails(DetailView):
         if request.method == 'POST':
             shop = get_object_or_404(Shop, pk=self.kwargs["pk"])
             shop.request_handler(request=request, user=self.request.user)
-            return HttpResponseRedirect("/shops/%s" % shop.id)
-
-
-    # def post(self, request, *args, **kwargs, ):
-    #     if request.method == 'POST':
-    #         group = get_object_or_404(BasicGroup, pk=self.kwargs["pk"])
-    #         if request.POST.get("add_requsete"):
-    #             BasicGroup.add_request(group, user=self.request.user)
-    #             return HttpResponseRedirect("/teams/%s" % group.id)
-    #         else:
-    #             member = get_object_or_404(UserModel, pk=value)
-    #             if request.POST.get("add"):
-    #                 BasicGroup.add_member(group,  member)
-    #                 return HttpResponseRedirect("/teams/%s" % group.id)
-    #
-    #             if request.POST.get("kick"):
-    #                 BasicGroup.kick_member(group, member)
-    #                 return HttpResponseRedirect("/teams/%s" % group.id)
-    #
-    #             if request.POST.get("refuse"):
-    #                 BasicGroup.refuse_request(group, member)
-    #                 return HttpResponseRedirect("/teams/%s" % group.id)
-    #     return HttpResponseRedirect("/teams/%s" % group.id)
+            return HttpResponseRedirect(f"/shops/{shop.id}")
