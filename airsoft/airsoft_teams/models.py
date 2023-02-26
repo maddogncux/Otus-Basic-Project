@@ -91,7 +91,7 @@ class Team(models.Model):
     chevron = models.ImageField(upload_to='chevron/', blank=True, default='nopic.jpeg')
     pattern = models.ManyToManyField("airsoft_gear.Pattern", blank=True, default='nopic.jpeg')
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="member",
-                                     through="airsoft_teams.Team_Member")
+                                     through="airsoft_teams.TeamMember")
     # frends = models.ManyToManyField(settings.AUTH_USER_MODEL,
     # related_name="frends" ,
     # through="airsoft_teams.Team_Frends")
