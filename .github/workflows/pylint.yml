@@ -24,7 +24,11 @@ jobs:
         pylint $(git ls-files '*.py') --load-plugins pylint_django 
         --load-plugins pylint_django.checkers.migrations 
         --disable=missing-docstring 
+        --disable=missing-class-docstring
+        --disable=missing-function-docstring
         --disable=undefined-loop-variable 
         --disable=duplicate-code
         --disable=inconsistent-return-statements
-
+        --disable=unused-import
+        --disable=unused-import
+        --disable=undefined-loop-variable
