@@ -56,4 +56,6 @@ class UserEditProfile(UpdateView):
 #             return redirect("homepage:index")
 #         messages.error(request, "Unsuccessful registration. Invalid information.")
 #     form = NewUserForm()
-#     return render(request=request, template_name="registration/register.html", context={"register_form": form})
+#     return render(request=request,
+#     template_name="registration/register.html",
+#     context={"register_form": form})
